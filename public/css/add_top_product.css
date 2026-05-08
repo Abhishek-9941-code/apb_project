@@ -1,0 +1,263 @@
+        :root {
+            --primary:       #7c3aed;
+            --primary-light: #9d5cf6;
+            --accent:        #ec4899;
+            --gradient:      linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            --card-bg:       #ffffff;
+            --body-bg:       #f5f3ff;
+            --text-dark:     #1e1b4b;
+            --text-muted:    #6b7280;
+            --border:        #e5e7eb;
+            --success:       #10b981;
+            --radius:        14px;
+            --shadow:        0 8px 32px rgba(124, 58, 237, 0.10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--body-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* ── Hero banner ── */
+        .page-hero {
+            background: var(--gradient);
+            padding: 48px 0 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            width: 340px; height: 340px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            top: -80px; right: -80px;
+        }
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -60px; left: 60px;
+        }
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .page-hero p {
+            color: rgba(255,255,255,0.80);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        .breadcrumb-item a { color: rgba(255,255,255,0.75); text-decoration: none; }
+        .breadcrumb-item.active { color: #fff; }
+        .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.5); }
+
+        /* ── Main card ── */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px 44px;
+            margin-top: -36px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ── Section headings inside card ── */
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── Form controls ── */
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+        .form-control, .form-select {
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px 14px;
+            transition: border-color .2s, box-shadow .2s;
+            color: var(--text-dark);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+            outline: none;
+        }
+        textarea.form-control { resize: vertical; min-height: 110px; }
+
+        /* ── Badge tags (category badge preview) ── */
+        .badge-preview {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #fff;
+            background: var(--gradient);
+        }
+
+        /* ── Status badge row ── */
+        .status-option input[type="radio"] { display: none; }
+        .status-option label {
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 25px;
+            border: 1.5px solid var(--border);
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all .2s;
+        }
+        .status-option input[type="radio"]:checked + label {
+            background: var(--gradient);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        /* ── Image upload box ── */
+        .upload-zone {
+            border: 2px dashed #c4b5fd;
+            border-radius: var(--radius);
+            background: #faf7ff;
+            text-align: center;
+            padding: 36px 20px;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+            position: relative;
+        }
+        .upload-zone:hover {
+            background: #f3eeff;
+            border-color: var(--primary-light);
+        }
+        .upload-zone input[type="file"] {
+            position: absolute; inset: 0;
+            opacity: 0; cursor: pointer;
+        }
+        .upload-icon {
+            width: 54px; height: 54px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        .upload-zone p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+        .upload-zone span { color: var(--primary); font-weight: 600; }
+
+        /* Image preview strip */
+        #imagePreviewWrap { display: none; }
+        #imagePreviewWrap img {
+            width: 80px; height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+        }
+
+        /* ── Price row ── */
+        .price-group .input-group-text {
+            background: var(--body-bg);
+            border: 1.5px solid var(--border);
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        .price-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* ── Discount badge live ── */
+        #discountBadge {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #d1fae5;
+            color: #065f46;
+            display: none;
+        }
+
+        /* ── Buttons ── */
+        .btn-submit {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 36px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 18px rgba(124,58,237,0.3);
+            transition: opacity .2s, transform .15s;
+        }
+        .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-reset {
+            background: #fff;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color .2s;
+        }
+        .btn-reset:hover { border-color: #aaa; }
+
+        /* ── Toast ── */
+        #successToast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: var(--gradient);
+            color: #fff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(124,58,237,0.3);
+            z-index: 9999;
+            display: none;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ── Responsive tweaks ── */
+        @media (max-width: 767px) {
+            .form-card { padding: 26px 18px; }
+            .page-hero h1 { font-size: 1.7rem; }
+        }

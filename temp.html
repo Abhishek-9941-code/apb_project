@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>APB Online Center</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --primary: #6C3DE8;
+      --secondary: #E83D8B;
+      --accent: #FF6B6B;
+      --grad: linear-gradient(135deg, #6C3DE8 0%, #A855A8 50%, #E83D8B 100%);
+      --grad-soft: linear-gradient(135deg, rgba(108,61,232,0.08) 0%, rgba(232,61,139,0.08) 100%);
+      --dark: #0F0A1E;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --border: rgba(108,61,232,0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; overflow-x: hidden; }
+
+    /* ── NAVBAR ── */
+    .navbar-apb {
+      background: #fff;
+      padding: 12px 0;
+      box-shadow: 0 2px 20px rgba(108,61,232,0.10);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .navbar-apb .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; white-space: nowrap;
+    }
+    .navbar-apb .brand i { -webkit-text-fill-color: initial; color: var(--primary); margin-right: 8px; }
+    .search-wrap { position: relative; flex: 1; max-width: 520px; margin: 0 24px; }
+    .search-wrap input {
+      width: 100%; border: 2px solid var(--border);
+      border-radius: 50px; padding: 9px 50px 9px 20px;
+      font-family: 'DM Sans', sans-serif; font-size: .92rem;
+      outline: none; transition: border .2s;
+    }
+    .search-wrap input:focus { border-color: var(--primary); }
+    .search-wrap button {
+      position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+      background: var(--grad); border: none; border-radius: 50px;
+      color: #fff; padding: 7px 18px; font-size: .85rem; cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-links a {
+      color: var(--text); text-decoration: none; font-size: .88rem;
+      font-weight: 500; padding: 7px 12px; border-radius: 8px; transition: all .2s;
+    }
+    .nav-links a:hover { background: var(--grad-soft); color: var(--primary); }
+    .nav-icons { display: flex; gap: 10px; align-items: center; }
+    .nav-icons a {
+      color: var(--muted); font-size: 1.1rem; position: relative;
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; transition: all .2s; text-decoration: none;
+    }
+    .nav-icons a:hover { background: var(--grad-soft); color: var(--primary); }
+    .badge-cart {
+      position: absolute; top: 2px; right: 2px;
+      background: var(--secondary); color: #fff;
+      font-size: .6rem; font-weight: 700;
+      width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-signup-nav {
+      background: var(--grad); color: #fff; border: none;
+      border-radius: 50px; padding: 8px 20px; font-size: .85rem;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: opacity .2s; white-space: nowrap;
+    }
+    .btn-signup-nav:hover { opacity: .88; color: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--grad);
+      min-height: 88vh;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='30' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3C/svg%3E") repeat;
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(70px); opacity: .35;
+    }
+    .orb1 { width: 500px; height: 500px; background: #fff; top: -150px; right: -100px; }
+    .orb2 { width: 300px; height: 300px; background: #FF6B6B; bottom: -80px; left: -60px; }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px; padding: 6px 16px; font-size: .82rem; font-weight: 600;
+      margin-bottom: 20px; letter-spacing: .5px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 800;
+      color: #fff; line-height: 1.15; margin-bottom: 18px;
+    }
+    .hero h1 span { text-decoration: underline; text-underline-offset: 6px; text-decoration-color: rgba(255,255,255,.4); }
+    .hero p { color: rgba(255,255,255,.85); font-size: 1.1rem; max-width: 480px; margin-bottom: 32px; }
+    .hero-search {
+      background: #fff; border-radius: 60px;
+      display: flex; align-items: center;
+      padding: 6px 6px 6px 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      max-width: 500px;
+    }
+    .hero-search input {
+      flex: 1; border: none; outline: none;
+      font-family: 'DM Sans', sans-serif; font-size: .95rem;
+    }
+    .hero-search button {
+      background: var(--grad); border: none; border-radius: 50px;
+      color: #fff; padding: 12px 28px; font-size: .9rem;
+      font-weight: 600; cursor: pointer; transition: opacity .2s;
+    }
+    .hero-search button:hover { opacity: .88; }
+    .hero-stats { display: flex; gap: 28px; margin-top: 36px; }
+    .hero-stat { color: #fff; }
+    .hero-stat .num { font-size: 1.7rem; font-weight: 800; display: block; }
+    .hero-stat .lbl { font-size: .78rem; opacity: .75; letter-spacing: .4px; }
+    /* floating cards */
+    .hero-visual { position: relative; }
+    .hero-card-main {
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px; padding: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+      max-width: 280px; margin: 0 auto;
+    }
+    .hero-card-main img { width: 100%; border-radius: 12px; height: 180px; object-fit: cover; }
+    .hero-badge-float {
+      position: absolute; background: #fff;
+      border-radius: 14px; padding: 10px 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      font-size: .8rem; font-weight: 600;
+    }
+    .hbf1 { top: 20px; right: -10px; color: var(--primary); }
+    .hbf2 { bottom: 40px; left: -20px; color: var(--secondary); }
+
+    /* ── MARQUEE / BRANDS ── */
+    .trust-bar {
+      background: #fff; padding: 14px 0; border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex; gap: 48px; animation: marquee 20s linear infinite; width: max-content;
+    }
+    .marquee-track span { color: var(--muted); font-size: .82rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── CATEGORIES ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; font-weight: 800; margin-bottom: 6px;
+    }
+    .section-sub { color: var(--muted); font-size: .95rem; margin-bottom: 36px; }
+    .cat-card {
+      background: #fff; border-radius: 20px; padding: 28px 20px;
+      text-align: center; cursor: pointer; transition: all .3s;
+      border: 2px solid transparent; box-shadow: 0 4px 20px rgba(108,61,232,0.06);
+    }
+    .cat-card:hover { border-color: var(--primary); transform: translateY(-6px); box-shadow: 0 16px 40px rgba(108,61,232,0.15); }
+    .cat-icon {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: var(--grad-soft); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 1.5rem; transition: all .3s;
+    }
+    .cat-card:hover .cat-icon { background: var(--grad); color: #fff; }
+    .cat-card:hover .cat-icon i { color: #fff !important; }
+    .cat-name { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+    .cat-count { color: var(--muted); font-size: .8rem; }
+
+    /* ── PRODUCT CARDS ── */
+    .prod-card {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(108,61,232,0.06); transition: all .3s;
+      border: 2px solid transparent;
+    }
+    .prod-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(108,61,232,0.15); border-color: var(--border); }
+    .prod-img-wrap { position: relative; overflow: hidden; }
+    .prod-img-wrap img { width: 100%; height: 200px; object-fit: cover; transition: transform .4s; }
+    .prod-card:hover .prod-img-wrap img { transform: scale(1.07); }
+    .prod-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--grad); color: #fff;
+      font-size: .7rem; font-weight: 700; padding: 4px 10px; border-radius: 50px;
+    }
+    .prod-wishlist {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(255,255,255,0.9); width: 34px; height: 34px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: .9rem; cursor: pointer; transition: all .2s;
+    }
+    .prod-wishlist:hover { color: var(--secondary); background: #fff; }
+    .prod-body { padding: 16px; }
+    .prod-cat { color: var(--primary); font-size: .75rem; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 6px; }
+    .prod-name { font-weight: 700; font-size: .95rem; margin-bottom: 8px; line-height: 1.35; }
+    .stars { color: #FBBF24; font-size: .8rem; margin-bottom: 8px; }
+    .stars span { color: var(--muted); font-size: .75rem; margin-left: 5px; }
+    .prod-price { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .price-new { font-size: 1.15rem; font-weight: 800; color: var(--primary); }
+    .price-old { font-size: .85rem; color: var(--muted); text-decoration: line-through; }
+    .price-save { font-size: .72rem; font-weight: 700; color: #10B981; background: #D1FAE5; padding: 2px 8px; border-radius: 50px; }
+    .btn-cart {
+      width: 100%; background: var(--grad); border: none; border-radius: 12px;
+      color: #fff; padding: 10px; font-weight: 600; font-size: .88rem;
+      cursor: pointer; transition: opacity .2s;
+    }
+    .btn-cart:hover { opacity: .88; }
+
+    /* ── DEALS SECTION ── */
+    .deals-section { background: var(--grad); padding: 80px 0; position: relative; overflow: hidden; }
+    .deals-section::after { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E") repeat; }
+    .deal-card {
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px; padding: 24px; backdrop-filter: blur(10px);
+      transition: all .3s; cursor: pointer;
+    }
+    .deal-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-4px); }
+    .deal-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; }
+    .deal-tag { background: var(--accent); color: #fff; font-size: .72rem; font-weight: 800; padding: 4px 12px; border-radius: 50px; display: inline-block; margin-bottom: 10px; letter-spacing: .5px; }
+    .deal-name { color: #fff; font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+    .deal-price { color: rgba(255,255,255,.9); font-weight: 800; font-size: 1.1rem; }
+    .deal-old { color: rgba(255,255,255,.55); font-size: .82rem; text-decoration: line-through; margin-left: 8px; }
+    .timer { display: flex; gap: 10px; margin-top: 12px; }
+    .timer-block { background: rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; text-align: center; min-width: 52px; }
+    .timer-block .t-num { color: #fff; font-size: 1.1rem; font-weight: 800; display: block; }
+    .timer-block .t-lbl { color: rgba(255,255,255,.6); font-size: .65rem; letter-spacing: .5px; }
+
+    /* ── WHY US ── */
+    .why-card {
+      background: #fff; border-radius: 20px; padding: 32px 24px;
+      text-align: center; box-shadow: 0 4px 20px rgba(108,61,232,0.06);
+      transition: all .3s;
+    }
+    .why-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(108,61,232,0.12); }
+    .why-icon {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: var(--grad); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 1.6rem; color: #fff;
+    }
+    .why-card h5 { font-weight: 700; margin-bottom: 10px; }
+    .why-card p { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+
+    /* ── RATED PRODUCTS ROW ── */
+    .rated-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+    .rated-row::-webkit-scrollbar { display: none; }
+    .rated-item {
+      background: #fff; border-radius: 16px; padding: 16px;
+      min-width: 180px; box-shadow: 0 4px 16px rgba(108,61,232,0.07);
+      transition: all .3s; cursor: pointer;
+    }
+    .rated-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(108,61,232,0.12); }
+    .rated-item img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
+    .rated-item .ri-name { font-size: .88rem; font-weight: 700; margin-bottom: 6px; }
+    .rated-item .ri-stars { color: #FBBF24; font-size: .75rem; }
+    .rated-item .ri-price { color: var(--primary); font-weight: 800; font-size: .95rem; margin-top: 6px; }
+
+    /* ── NEWSLETTER ── */
+    .newsletter { background: var(--dark); padding: 80px 0; position: relative; overflow: hidden; }
+    .newsletter::before { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: var(--primary); filter: blur(100px); opacity: .15; top: -100px; right: -100px; }
+    .newsletter h2 { font-family: 'Playfair Display', serif; color: #fff; font-size: 2.2rem; font-weight: 800; }
+    .newsletter p { color: rgba(255,255,255,.65); margin-bottom: 28px; }
+    .nl-form { display: flex; gap: 12px; max-width: 460px; }
+    .nl-form input {
+      flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; padding: 13px 18px; color: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: .9rem; outline: none; transition: border .2s;
+    }
+    .nl-form input::placeholder { color: rgba(255,255,255,.4); }
+    .nl-form input:focus { border-color: rgba(255,255,255,.4); }
+    .nl-form button { background: var(--grad); border: none; border-radius: 12px; color: #fff; padding: 13px 28px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity .2s; }
+    .nl-form button:hover { opacity: .88; }
+
+    /* ── FOOTER ── */
+    footer { background: #080514; padding: 64px 0 30px; }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 14px; }
+    .footer-brand i { -webkit-text-fill-color: initial; color: var(--primary); margin-right: 6px; }
+    footer p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.7; }
+    .footer-heading { color: #fff; font-weight: 700; font-size: .9rem; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 18px; }
+    .footer-links { list-style: none; padding: 0; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .88rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--secondary); }
+    .social-row { display: flex; gap: 12px; margin-top: 6px; }
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.6); font-size: .95rem; text-decoration: none; transition: all .2s;
+    }
+    .social-btn:hover { background: var(--grad); color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.07); margin-top: 50px; padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { color: rgba(255,255,255,.3); font-size: .8rem; }
+    .footer-bottom a { color: rgba(255,255,255,.45); text-decoration: none; font-size: .8rem; transition: color .2s; }
+    .footer-bottom a:hover { color: var(--secondary); }
+
+    /* ── UTILS ── */
+    .section-pad { padding: 88px 0; }
+    .bg-soft { background: #f7f5ff; }
+    .grad-text { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .search-wrap { display: none; }
+      .hero h1 { font-size: 2rem; }
+      .hero-visual { display: none; }
+      .hero-stats { gap: 18px; }
+      .nl-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar-apb">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 w-100">
+      <a href="#" class="brand text-decoration-none"><i class="fa-solid fa-book-open-reader"></i>APB Online</a>
+
+      <div class="search-wrap">
+        <input type="text" placeholder="Search books, electronics, stationery…">
+        <button><i class="fa fa-search me-1"></i>Search</button>
+      </div>
+
+      <div class="nav-links d-none d-xl-flex ms-auto">
+        <a href="#">Home</a>
+        <a href="#categories">Categories</a>
+        <a href="#top-products">Top Products</a>
+        <a href="#rated">Most Rated</a>
+      </div>
+
+      <div class="nav-icons ms-2">
+        <a href="#" title="Cart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="badge-cart">3</span>
+        </a>
+        <a href="#" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
+        <a href="#" title="Account"><i class="fa-regular fa-user"></i></a>
+      </div>
+      <a href="#" class="btn-signup-nav ms-1"><i class="fa-solid fa-arrow-right-to-bracket me-1"></i>Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="container py-5">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6 hero-content">
+        <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> New Arrivals Every Week</div>
+        <h1>Discover the Best <span>Books &amp; Products</span> in One Place</h1>
+        <p>Your one-stop destination for books, electronics, study materials and more — curated with care, delivered with love.</p>
+        <div class="hero-search">
+          <i class="fa-solid fa-magnifying-glass me-2" style="color:#9CA3AF"></i>
+          <input type="text" placeholder="What are you looking for today?">
+          <button>Find Now</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="num">50K+</span><span class="lbl">Products</span></div>
+          <div class="hero-stat"><span class="num">120K+</span><span class="lbl">Customers</span></div>
+          <div class="hero-stat"><span class="num">4.9★</span><span class="lbl">Avg Rating</span></div>
+        </div>
+      </div>
+      <div class="col-lg-6 hero-visual position-relative d-flex justify-content-center">
+        <div class="hero-card-main" style="position:relative">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400" alt="Books">
+          <div style="padding:12px 0 0">
+            <div style="font-size:.75rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Best Seller</div>
+            <div style="font-weight:800;font-size:1rem;margin:4px 0">Atomic Habits</div>
+            <div style="color:#FBBF24;font-size:.8rem">★★★★★ <span style="color:#9CA3AF">(2.4k reviews)</span></div>
+            <div style="color:var(--primary);font-weight:800;font-size:1.1rem;margin-top:6px">₹499 <span style="color:#9CA3AF;text-decoration:line-through;font-size:.85rem;font-weight:400">₹799</span></div>
+          </div>
+        </div>
+        <div class="hero-badge-float hbf1"><i class="fa-solid fa-shield-halved me-1" style="color:var(--primary)"></i>Secure Checkout</div>
+        <div class="hero-badge-float hbf2"><i class="fa-solid fa-truck-fast me-1" style="color:var(--secondary)"></i>Free Delivery ₹499+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TRUST BAR ═══════════════ -->
+<div class="trust-bar">
+  <div class="marquee-track">
+    <span><i class="fa-solid fa-circle-check me-2" style="color:#10B981"></i>Free Returns</span>
+    <span><i class="fa-solid fa-shield-halved me-2" style="color:var(--primary)"></i>100% Secure</span>
+    <span><i class="fa-solid fa-truck-fast me-2" style="color:var(--secondary)"></i>Express Delivery</span>
+    <span><i class="fa-solid fa-star me-2" style="color:#FBBF24"></i>Verified Reviews</span>
+    <span><i class="fa-solid fa-headset me-2" style="color:var(--primary)"></i>24/7 Support</span>
+    <span><i class="fa-solid fa-tag me-2" style="color:var(--accent)"></i>Best Prices</span>
+    <!-- duplicate for seamless loop -->
+    <span><i class="fa-solid fa-circle-check me-2" style="color:#10B981"></i>Free Returns</span>
+    <span><i class="fa-solid fa-shield-halved me-2" style="color:var(--primary)"></i>100% Secure</span>
+    <span><i class="fa-solid fa-truck-fast me-2" style="color:var(--secondary)"></i>Express Delivery</span>
+    <span><i class="fa-solid fa-star me-2" style="color:#FBBF24"></i>Verified Reviews</span>
+    <span><i class="fa-solid fa-headset me-2" style="color:var(--primary)"></i>24/7 Support</span>
+    <span><i class="fa-solid fa-tag me-2" style="color:var(--accent)"></i>Best Prices</span>
+  </div>
+</div>
+
+<!-- ═══════════════ CATEGORIES ═══════════════ -->
+<section class="section-pad bg-soft" id="categories">
+  <div class="container">
+    <div class="text-center scroll-reveal">
+      <div class="hero-eyebrow d-inline-flex mb-3" style="background:var(--grad-soft);color:var(--primary);border-color:var(--border)"><i class="fa-solid fa-layer-group"></i>Browse by Category</div>
+      <h2 class="section-title">Most Demanding <span class="grad-text">Categories</span></h2>
+      <p class="section-sub">Explore our wide range of curated collections</p>
+    </div>
+    <div class="row g-3 scroll-reveal">
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-book-open" style="color:var(--primary)"></i></div>
+          <div class="cat-name">Books</div>
+          <div class="cat-count">8,420 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-laptop" style="color:var(--secondary)"></i></div>
+          <div class="cat-name">Electronics</div>
+          <div class="cat-count">3,210 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-graduation-cap" style="color:#F59E0B"></i></div>
+          <div class="cat-name">Study Materials</div>
+          <div class="cat-count">5,680 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-pen-ruler" style="color:#10B981"></i></div>
+          <div class="cat-name">Stationery</div>
+          <div class="cat-count">2,140 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-fire" style="color:var(--accent)"></i></div>
+          <div class="cat-name">Trending</div>
+          <div class="cat-count">1,890 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-gamepad" style="color:#8B5CF6"></i></div>
+          <div class="cat-name">Accessories</div>
+          <div class="cat-count">4,200 items</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TOP PRODUCTS ═══════════════ -->
+<section class="section-pad" id="top-products">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">Top <span class="grad-text">Products</span></h2>
+        <p class="section-sub mb-0">Hand-picked bestsellers just for you</p>
+      </div>
+      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <!-- Card 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" alt="Book">
+            <span class="prod-badge">Bestseller</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">The Psychology of Money</div>
+            <div class="stars">★★★★★ <span>(1.2k)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹379</span>
+              <span class="price-old">₹599</span>
+              <span class="price-save">37% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Laptop">
+            <span class="prod-badge">New</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Electronics</div>
+            <div class="prod-name">Wireless Noise-Cancelling Headphones</div>
+            <div class="stars">★★★★☆ <span>(865)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹2,499</span>
+              <span class="price-old">₹3,999</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Study">
+            <span class="prod-badge">Hot</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Study Materials</div>
+            <div class="prod-name">JEE Advanced Complete Study Kit 2025</div>
+            <div class="stars">★★★★★ <span>(3.4k)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹1,299</span>
+              <span class="price-old">₹2,100</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=400" alt="Stationery">
+            <span class="prod-badge">Sale</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Stationery</div>
+            <div class="prod-name">Premium Gel Pen Set – 36 Colors</div>
+            <div class="stars">★★★★☆ <span>(540)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹249</span>
+              <span class="price-old">₹399</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MOST RATED ═══════════════ -->
+<section class="section-pad bg-soft" id="rated">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">Most <span class="grad-text">Rated</span></h2>
+        <p class="section-sub mb-0">Top rated by our community</p>
+      </div>
+      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="rated-row scroll-reveal">
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300" alt="">
+        <div class="ri-name">Atomic Habits</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(2.4k)</span></div>
+        <div class="ri-price">₹499</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300" alt="">
+        <div class="ri-name">Polaroid Camera</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(1.1k)</span></div>
+        <div class="ri-price">₹3,299</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=300" alt="">
+        <div class="ri-name">iPhone Stand Pro</div>
+        <div class="ri-stars">★★★★☆ <span style="color:#9CA3AF;font-size:.72rem">(890)</span></div>
+        <div class="ri-price">₹699</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300" alt="">
+        <div class="ri-name">Harry Potter Box Set</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(5.6k)</span></div>
+        <div class="ri-price">₹1,899</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300" alt="">
+        <div class="ri-name">Smart Notebook A5</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(720)</span></div>
+        <div class="ri-price">₹349</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=300" alt="">
+        <div class="ri-name">Rich Dad Poor Dad</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(4.2k)</span></div>
+        <div class="ri-price">₹299</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEALS ═══════════════ -->
+<section class="deals-section">
+  <div class="container" style="position:relative;z-index:2">
+    <div class="text-center mb-5 scroll-reveal">
+      <div class="hero-eyebrow d-inline-flex mb-3" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,.25)"><i class="fa-solid fa-bolt"></i>Limited Time</div>
+      <h2 class="section-title text-white mb-2">Featured <span style="text-decoration:underline;text-underline-offset:6px;text-decoration-color:rgba(255,255,255,.4)">Deals</span></h2>
+      <p style="color:rgba(255,255,255,.7)">Don't miss out — offers expire soon!</p>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" alt="Deal">
+          <span class="deal-tag"><i class="fa fa-fire me-1"></i>40% OFF</span>
+          <div class="deal-name">Best-Seller Books Bundle</div>
+          <div><span class="deal-price">₹999</span><span class="deal-old">₹1,699</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h1">08</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m1">24</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s1">37</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Deal">
+          <span class="deal-tag" style="background:#10B981"><i class="fa fa-tag me-1"></i>35% OFF</span>
+          <div class="deal-name">Laptop Accessories Combo</div>
+          <div><span class="deal-price">₹1,499</span><span class="deal-old">₹2,299</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h2">05</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m2">59</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s2">12</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Deal">
+          <span class="deal-tag" style="background:#8B5CF6"><i class="fa fa-graduation-cap me-1"></i>50% OFF</span>
+          <div class="deal-name">Study Material Mega Pack</div>
+          <div><span class="deal-price">₹799</span><span class="deal-old">₹1,599</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h3">12</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m3">00</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s3">00</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MORE PRODUCTS ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">New <span class="grad-text">Arrivals</span></h2>
+        <p class="section-sub mb-0">Fresh picks added this week</p>
+      </div>
+      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=400" alt="">
+            <span class="prod-badge">New</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">Rich Dad Poor Dad – Special Ed.</div>
+            <div class="stars">★★★★★ <span>(4.2k)</span></div>
+            <div class="prod-price"><span class="price-new">₹299</span><span class="price-old">₹449</span><span class="price-save">33%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400" alt="">
+            <span class="prod-badge">Trending</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Stationery</div>
+            <div class="prod-name">Rocketbook Smart Reusable Notebook</div>
+            <div class="stars">★★★★☆ <span>(720)</span></div>
+            <div class="prod-price"><span class="price-new">₹849</span><span class="price-old">₹1,299</span><span class="price-save">35%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400" alt="">
+            <span class="prod-badge">Popular</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Electronics</div>
+            <div class="prod-name">Fujifilm Instax Mini Polaroid</div>
+            <div class="stars">★★★★★ <span>(1.1k)</span></div>
+            <div class="prod-price"><span class="price-new">₹3,299</span><span class="price-old">₹4,999</span><span class="price-save">34%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400" alt="">
+            <span class="prod-badge">Classic</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">Harry Potter Complete Box Set</div>
+            <div class="stars">★★★★★ <span>(5.6k)</span></div>
+            <div class="prod-price"><span class="price-new">₹1,899</span><span class="price-old">₹2,999</span><span class="price-save">37%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHY US ═══════════════ -->
+<section class="section-pad bg-soft">
+  <div class="container">
+    <div class="text-center mb-5 scroll-reveal">
+      <h2 class="section-title">Why Shop <span class="grad-text">With Us?</span></h2>
+      <p class="section-sub">We put your experience first, every single time</p>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+          <h5>Fast Delivery</h5>
+          <p>Get your orders delivered to your doorstep within 24–48 hours across India.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h5>Secure Payments</h5>
+          <p>All transactions are 256-bit encrypted. Your financial data stays safe.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-medal"></i></div>
+          <h5>Best Quality</h5>
+          <p>Every product is verified and quality-checked before reaching you.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-headset"></i></div>
+          <h5>24/7 Support</h5>
+          <p>Our support team is always online, ready to help you anytime, anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NEWSLETTER ═══════════════ -->
+<section class="newsletter">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-6 scroll-reveal">
+        <h2>Get the Best Deals <span class="grad-text">First</span></h2>
+        <p class="mt-2">Subscribe to our newsletter and never miss a sale, new launch, or exclusive offer.</p>
+        <div class="nl-form">
+          <input type="email" placeholder="your@email.com">
+          <button><i class="fa fa-paper-plane me-2"></i>Subscribe</button>
+        </div>
+      </div>
+      <div class="col-lg-6 text-lg-end scroll-reveal">
+        <div style="display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:flex-end">
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">50K+</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">Subscribers</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;color:#fff">₹500</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">Avg savings/month</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;color:#FBBF24">4.9★</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">User Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="container">
+    <div class="row gy-5">
+      <div class="col-lg-4">
+        <div class="footer-brand"><i class="fa-solid fa-book-open-reader"></i>APB Online Center</div>
+        <p>Your trusted destination for books, electronics, and study essentials. Quality products, unbeatable prices, and exceptional service.</p>
+        <div class="social-row mt-4">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2">
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <div class="footer-heading">Support</div>
+        <ul class="footer-links">
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Order Track</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">Disclaimer</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <div class="footer-heading">Categories</div>
+        <ul class="footer-links">
+          <li><a href="#">Books</a></li>
+          <li><a href="#">Electronics</a></li>
+          <li><a href="#">Stationery</a></li>
+          <li><a href="#">Trending</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 APB Online Center. All rights reserved.</p>
+      <div style="display:flex;gap:20px">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ── Countdown timers ──
+  function countdown(hId, mId, sId, totalSecs) {
+    let t = totalSecs;
+    setInterval(() => {
+      if (t <= 0) return;
+      t--;
+      const h = String(Math.floor(t / 3600)).padStart(2,'0');
+      const m = String(Math.floor((t % 3600) / 60)).padStart(2,'0');
+      const s = String(t % 60).padStart(2,'0');
+      document.getElementById(hId).textContent = h;
+      document.getElementById(mId).textContent = m;
+      document.getElementById(sId).textContent = s;
+    }, 1000);
+  }
+  countdown('h1','m1','s1', 8*3600 + 24*60 + 37);
+  countdown('h2','m2','s2', 5*3600 + 59*60 + 12);
+  countdown('h3','m3','s3', 12*3600);
+
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.scroll-reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // ── Wishlist toggle ──
+  document.querySelectorAll('.prod-wishlist').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const icon = btn.querySelector('i');
+      icon.classList.toggle('fa-regular');
+      icon.classList.toggle('fa-solid');
+      icon.style.color = icon.classList.contains('fa-solid') ? '#E83D8B' : '';
+    });
+  });
+
+  // ── Cart add feedback ──
+  document.querySelectorAll('.btn-cart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check me-2"></i>Added!';
+      btn.style.background = '#10B981';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 1600);
+    });
+  });
+</script>
+</body>
+</html>

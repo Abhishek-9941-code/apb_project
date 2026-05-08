@@ -1,0 +1,110 @@
+<% layout("/layout/boilerplat.ejs") %>
+<body>
+    <main class="container login-wrap d-flex align-items-center py-4">
+      <div class="row justify-content-center w-100">
+        <div class="col-12 col-lg-10 col-xl-9">
+          <div class="card login-card">
+            <div class="row g-0">
+              <aside class="col-lg-5 brand-panel p-4 p-md-5 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="brand-icon mb-4">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                  </div>
+                  <h1 class="h3 fw-bold mb-3">APB Online center</h1>
+                  <p class="mb-0 opacity-75">
+                    Find the best books, explore categories, and enjoy convenient online book shopping..
+                  </p>
+                </div>
+
+                <div class="mt-5 pt-4 small opacity-75">
+                  <p class="mb-2"><i class="fa-solid fa-circle-check me-2"></i> Secure admin access</p>
+                  <p class="mb-2"><i class="fa-solid fa-circle-check me-2"></i> Responsive management tools</p>
+                  <p class="mb-0"><i class="fa-solid fa-circle-check me-2"></i> Fast item updates</p>
+                </div>
+              </aside>
+
+              <section class="col-lg-7 form-panel p-4 p-md-5">
+                <div class="d-flex align-items-center gap-2 mb-3 d-lg-none">
+                  <i class="fa-solid fa-book-open text-primary"></i>
+                  <span class="fw-semibold">BookHub Admin</span>
+                </div>
+
+                <h2 class="h4 fw-bold mb-2">Welcome back</h2>
+                <p class="text-muted mb-4">Login to manage your shop inventory and featured listings.</p>
+
+               <form id="loginForm" class="row g-3 needs-validation" novalidate method="post" action="/apb/login">
+                  <div class="mb-3">
+                    <label for="email" class="form-label fw-medium">Email address</label>
+
+                    <div class="input-group has-validation">
+                      
+                      <span class="input-group-text">
+                        <i class="fa-regular fa-envelope"></i>
+                      </span>
+
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="admin@bookhub.com"
+                        required
+                      >
+
+                      <div class="invalid-feedback">
+                        Please enter a valid email address.
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="mb-2">
+                    <label for="password" class="form-label fw-medium">Password</label>
+
+                    <div class="input-group has-validation">
+
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                      </span>
+
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        minlength="6"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="input-group-text"
+                        id="togglePassword"
+                        aria-label="Toggle password visibility"
+                      >
+                        <i class="fa-regular fa-eye"></i>
+                      </button>
+
+                      <div class="invalid-feedback">
+                        Password must be at least 6 characters.
+                      </div>
+
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-login w-100 py-2 mb-3">Sign in</button>
+                </form>
+                
+                <div class="text-center text-muted small">
+                    Don't have an account?
+                    <a href="/apb/signup" class="small-link">Register</a>
+                  </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+</div>
+</body>

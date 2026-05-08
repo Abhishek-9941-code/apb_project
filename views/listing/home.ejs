@@ -1,0 +1,472 @@
+<% layout("/layout/boilerplat.ejs") %>
+
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="container py-5">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6 hero-content">
+        <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> New Arrivals Every Week</div>
+        <h1>Discover the Best <span>Books &amp; Products</span> in One Place</h1>
+        <p>Your one-stop destination for books, electronics, study materials and more — curated with care, delivered with love.</p>
+        <div class="hero-search">
+          <i class="fa-solid fa-magnifying-glass me-2" style="color:#9CA3AF"></i>
+          <input type="text" placeholder="What are you looking for today?">
+          <button>Find Now</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="num">50K+</span><span class="lbl">Products</span></div>
+          <div class="hero-stat"><span class="num">120K+</span><span class="lbl">Customers</span></div>
+          <div class="hero-stat"><span class="num">4.9★</span><span class="lbl">Avg Rating</span></div>
+        </div>
+      </div>
+      <div class="col-lg-6 hero-visual position-relative d-flex justify-content-center">
+        <div class="hero-card-main" style="position:relative">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400" alt="Books">
+          <div style="padding:12px 0 0">
+            <div style="font-size:.75rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Best Seller</div>
+            <div style="font-weight:800;font-size:1rem;margin:4px 0">Atomic Habits</div>
+            <div style="color:#FBBF24;font-size:.8rem">★★★★★ <span style="color:#9CA3AF">(2.4k reviews)</span></div>
+            <div style="color:var(--primary);font-weight:800;font-size:1.1rem;margin-top:6px">₹499 <span style="color:#9CA3AF;text-decoration:line-through;font-size:.85rem;font-weight:400">₹799</span></div>
+          </div>
+        </div>
+        <div class="hero-badge-float hbf1"><i class="fa-solid fa-shield-halved me-1" style="color:var(--primary)"></i>Secure Checkout</div>
+        <div class="hero-badge-float hbf2"><i class="fa-solid fa-truck-fast me-1" style="color:var(--secondary)"></i>Free Delivery ₹499+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TRUST BAR ═══════════════ -->
+<div class="trust-bar">
+  <div class="marquee-track">
+    <span><i class="fa-solid fa-circle-check me-2" style="color:#10B981"></i>Free Returns</span>
+    <span><i class="fa-solid fa-shield-halved me-2" style="color:var(--primary)"></i>100% Secure</span>
+    <span><i class="fa-solid fa-truck-fast me-2" style="color:var(--secondary)"></i>Express Delivery</span>
+    <span><i class="fa-solid fa-star me-2" style="color:#FBBF24"></i>Verified Reviews</span>
+    <span><i class="fa-solid fa-headset me-2" style="color:var(--primary)"></i>24/7 Support</span>
+    <span><i class="fa-solid fa-tag me-2" style="color:var(--accent)"></i>Best Prices</span>
+    <!-- duplicate for seamless loop -->
+    <span><i class="fa-solid fa-circle-check me-2" style="color:#10B981"></i>Free Returns</span>
+    <span><i class="fa-solid fa-shield-halved me-2" style="color:var(--primary)"></i>100% Secure</span>
+    <span><i class="fa-solid fa-truck-fast me-2" style="color:var(--secondary)"></i>Express Delivery</span>
+    <span><i class="fa-solid fa-star me-2" style="color:#FBBF24"></i>Verified Reviews</span>
+    <span><i class="fa-solid fa-headset me-2" style="color:var(--primary)"></i>24/7 Support</span>
+    <span><i class="fa-solid fa-tag me-2" style="color:var(--accent)"></i>Best Prices</span>
+  </div>
+</div>
+
+<!-- ═══════════════ CATEGORIES ═══════════════ -->
+<section class="section-pad bg-soft" id="categories">
+  <div class="container">
+    <div class="text-center scroll-reveal">
+      <div class="hero-eyebrow d-inline-flex mb-3" style="background:var(--grad-soft);color:var(--primary);border-color:var(--border)"><i class="fa-solid fa-layer-group"></i>Browse by Category</div>
+      <h2 class="section-title">Most Demanding <span class="grad-text">Categories</span></h2>
+      <p class="section-sub">Explore our wide range of curated collections</p>
+    </div>
+    <div class="row g-3 scroll-reveal">
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-book-open" style="color:var(--primary)"></i></div>
+          <div class="cat-name">Books</div>
+          <div class="cat-count">8,420 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-laptop" style="color:var(--secondary)"></i></div>
+          <div class="cat-name">Electronics</div>
+          <div class="cat-count">3,210 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-graduation-cap" style="color:#F59E0B"></i></div>
+          <div class="cat-name">Study Materials</div>
+          <div class="cat-count">5,680 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-pen-ruler" style="color:#10B981"></i></div>
+          <div class="cat-name">Stationery</div>
+          <div class="cat-count">2,140 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-fire" style="color:var(--accent)"></i></div>
+          <div class="cat-name">Trending</div>
+          <div class="cat-count">1,890 items</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card">
+          <div class="cat-icon"><i class="fa-solid fa-gamepad" style="color:#8B5CF6"></i></div>
+          <div class="cat-name">Accessories</div>
+          <div class="cat-count">4,200 items</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TOP PRODUCTS ═══════════════ -->
+<section class="section-pad" id="top-products">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">Top <span class="grad-text">Products</span></h2>
+        <p class="section-sub mb-0">Hand-picked bestsellers just for you</p>
+      </div>
+      <a href="/apb/top_product" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <!-- Card 1 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" alt="Book">
+            <span class="prod-badge">Bestseller</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">The Psychology of Money</div>
+            <div class="stars">★★★★★ <span>(1.2k)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹379</span>
+              <span class="price-old">₹599</span>
+              <span class="price-save">37% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Laptop">
+            <span class="prod-badge">New</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Electronics</div>
+            <div class="prod-name">Wireless Noise-Cancelling Headphones</div>
+            <div class="stars">★★★★☆ <span>(865)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹2,499</span>
+              <span class="price-old">₹3,999</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Study">
+            <span class="prod-badge">Hot</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Study Materials</div>
+            <div class="prod-name">JEE Advanced Complete Study Kit 2025</div>
+            <div class="stars">★★★★★ <span>(3.4k)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹1,299</span>
+              <span class="price-old">₹2,100</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=400" alt="Stationery">
+            <span class="prod-badge">Sale</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Stationery</div>
+            <div class="prod-name">Premium Gel Pen Set – 36 Colors</div>
+            <div class="stars">★★★★☆ <span>(540)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹249</span>
+              <span class="price-old">₹399</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MOST RATED ═══════════════ -->
+<section class="section-pad bg-soft" id="rated">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">Most <span class="grad-text">Rated</span></h2>
+        <p class="section-sub mb-0">Top rated by our community</p>
+      </div>
+      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="rated-row scroll-reveal">
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300" alt="">
+        <div class="ri-name">Atomic Habits</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(2.4k)</span></div>
+        <div class="ri-price">₹499</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300" alt="">
+        <div class="ri-name">Polaroid Camera</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(1.1k)</span></div>
+        <div class="ri-price">₹3,299</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=300" alt="">
+        <div class="ri-name">iPhone Stand Pro</div>
+        <div class="ri-stars">★★★★☆ <span style="color:#9CA3AF;font-size:.72rem">(890)</span></div>
+        <div class="ri-price">₹699</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300" alt="">
+        <div class="ri-name">Harry Potter Box Set</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(5.6k)</span></div>
+        <div class="ri-price">₹1,899</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300" alt="">
+        <div class="ri-name">Smart Notebook A5</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(720)</span></div>
+        <div class="ri-price">₹349</div>
+      </div>
+      <div class="rated-item">
+        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=300" alt="">
+        <div class="ri-name">Rich Dad Poor Dad</div>
+        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(4.2k)</span></div>
+        <div class="ri-price">₹299</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEALS ═══════════════ -->
+<section class="deals-section">
+  <div class="container" style="position:relative;z-index:2">
+    <div class="text-center mb-5 scroll-reveal">
+      <div class="hero-eyebrow d-inline-flex mb-3" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,.25)"><i class="fa-solid fa-bolt"></i>Limited Time</div>
+      <h2 class="section-title text-white mb-2">Featured <span style="text-decoration:underline;text-underline-offset:6px;text-decoration-color:rgba(255,255,255,.4)">Deals</span></h2>
+      <p style="color:rgba(255,255,255,.7)">Don't miss out — offers expire soon!</p>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" alt="Deal">
+          <span class="deal-tag"><i class="fa fa-fire me-1"></i>40% OFF</span>
+          <div class="deal-name">Best-Seller Books Bundle</div>
+          <div><span class="deal-price">₹999</span><span class="deal-old">₹1,699</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h1">08</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m1">24</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s1">37</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Deal">
+          <span class="deal-tag" style="background:#10B981"><i class="fa fa-tag me-1"></i>35% OFF</span>
+          <div class="deal-name">Laptop Accessories Combo</div>
+          <div><span class="deal-price">₹1,499</span><span class="deal-old">₹2,299</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h2">05</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m2">59</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s2">12</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="deal-card">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Deal">
+          <span class="deal-tag" style="background:#8B5CF6"><i class="fa fa-graduation-cap me-1"></i>50% OFF</span>
+          <div class="deal-name">Study Material Mega Pack</div>
+          <div><span class="deal-price">₹799</span><span class="deal-old">₹1,599</span></div>
+          <div class="timer">
+            <div class="timer-block"><span class="t-num" id="h3">12</span><span class="t-lbl">HRS</span></div>
+            <div class="timer-block"><span class="t-num" id="m3">00</span><span class="t-lbl">MIN</span></div>
+            <div class="timer-block"><span class="t-num" id="s3">00</span><span class="t-lbl">SEC</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MORE PRODUCTS ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">New <span class="grad-text">Arrivals</span></h2>
+        <p class="section-sub mb-0">Fresh picks added this week</p>
+      </div>
+      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=400" alt="">
+            <span class="prod-badge">New</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">Rich Dad Poor Dad – Special Ed.</div>
+            <div class="stars">★★★★★ <span>(4.2k)</span></div>
+            <div class="prod-price"><span class="price-new">₹299</span><span class="price-old">₹449</span><span class="price-save">33%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400" alt="">
+            <span class="prod-badge">Trending</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Stationery</div>
+            <div class="prod-name">Rocketbook Smart Reusable Notebook</div>
+            <div class="stars">★★★★☆ <span>(720)</span></div>
+            <div class="prod-price"><span class="price-new">₹849</span><span class="price-old">₹1,299</span><span class="price-save">35%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400" alt="">
+            <span class="prod-badge">Popular</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Electronics</div>
+            <div class="prod-name">Fujifilm Instax Mini Polaroid</div>
+            <div class="stars">★★★★★ <span>(1.1k)</span></div>
+            <div class="prod-price"><span class="price-new">₹3,299</span><span class="price-old">₹4,999</span><span class="price-save">34%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400" alt="">
+            <span class="prod-badge">Classic</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Books</div>
+            <div class="prod-name">Harry Potter Complete Box Set</div>
+            <div class="stars">★★★★★ <span>(5.6k)</span></div>
+            <div class="prod-price"><span class="price-new">₹1,899</span><span class="price-old">₹2,999</span><span class="price-save">37%</span></div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHY US ═══════════════ -->
+<section class="section-pad bg-soft">
+  <div class="container">
+    <div class="text-center mb-5 scroll-reveal">
+      <h2 class="section-title">Why Shop <span class="grad-text">With Us?</span></h2>
+      <p class="section-sub">We put your experience first, every single time</p>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+          <h5>Fast Delivery</h5>
+          <p>Get your orders delivered to your doorstep within 24–48 hours across India.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h5>Secure Payments</h5>
+          <p>All transactions are 256-bit encrypted. Your financial data stays safe.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-medal"></i></div>
+          <h5>Best Quality</h5>
+          <p>Every product is verified and quality-checked before reaching you.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-headset"></i></div>
+          <h5>24/7 Support</h5>
+          <p>Our support team is always online, ready to help you anytime, anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NEWSLETTER ═══════════════ -->
+<section class="newsletter">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-6 scroll-reveal">
+        <h2>Get the Best Deals <span class="grad-text">First</span></h2>
+        <p class="mt-2">Subscribe to our newsletter and never miss a sale, new launch, or exclusive offer.</p>
+        <div class="nl-form">
+          <input type="email" placeholder="your@email.com">
+          <button><i class="fa fa-paper-plane me-2"></i>Subscribe</button>
+        </div>
+      </div>
+      <div class="col-lg-6 text-lg-end scroll-reveal">
+        <div style="display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:flex-end">
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">50K+</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">Subscribers</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;color:#fff">₹500</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">Avg savings/month</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:2rem;font-weight:800;color:#FBBF24">4.9★</div>
+            <div style="color:rgba(255,255,255,.5);font-size:.82rem">User Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+</body>

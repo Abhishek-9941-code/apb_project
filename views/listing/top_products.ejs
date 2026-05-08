@@ -1,0 +1,107 @@
+<% layout("/layout/boilerplat.ejs") %>
+
+<section class="section-pad" id="top-products">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">Top <span class="grad-text">Products</span></h2>
+        <p class="section-sub mb-0">Hand-picked bestsellers just for you</p>
+      </div>
+      <a href="/apb/add_product" class="btn-signup-nav" style="font-size:.82rem">Add product <i class="fa fa-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4 scroll-reveal">
+      <% for(let d of data)  { %>
+        <!-- Card 1 -->
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="prod-card">
+            <div class="prod-img-wrap">
+              <img src=<%= d.image %> alt="Book">
+              <span class="prod-badge">Bestseller</span>
+              <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+            </div>
+            <div class="prod-body">
+              <div class="prod-cat">
+                <%= d.Category %>
+              </div>
+              <div class="prod-name">
+                <%= d.name %>
+              </div>
+              <div class="stars">★★★★★ <span>(1.2k)</span></div>
+              <div class="prod-price">
+                <span class="price-new">
+                  <%= "₹" + d.Selling_price %>
+                </span>
+                <span class="price-old">₹599</span>
+                <span class="price-save">37% off</span>
+              </div>
+              <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      <!-- Card 2 -->
+      <!-- <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Laptop">
+            <span class="prod-badge">New</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Electronics</div>
+            <div class="prod-name">Wireless Noise-Cancelling Headphones</div>
+            <div class="stars">★★★★☆ <span>(865)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹2,499</span>
+              <span class="price-old">₹3,999</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div> -->
+      <!-- Card 3 -->
+      <!-- <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Study">
+            <span class="prod-badge">Hot</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Study Materials</div>
+            <div class="prod-name">JEE Advanced Complete Study Kit 2025</div>
+            <div class="stars">★★★★★ <span>(3.4k)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹1,299</span>
+              <span class="price-old">₹2,100</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div> -->
+      <!-- Card 4 -->
+      <!-- <div class="col-6 col-md-4 col-lg-3">
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=400" alt="Stationery">
+            <span class="prod-badge">Sale</span>
+            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+          </div>
+          <div class="prod-body">
+            <div class="prod-cat">Stationery</div>
+            <div class="prod-name">Premium Gel Pen Set – 36 Colors</div>
+            <div class="stars">★★★★☆ <span>(540)</span></div>
+            <div class="prod-price">
+              <span class="price-new">₹249</span>
+              <span class="price-old">₹399</span>
+              <span class="price-save">38% off</span>
+            </div>
+            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</section>

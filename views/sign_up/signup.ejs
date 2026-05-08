@@ -1,0 +1,224 @@
+<% layout("/layout/boilerplat.ejs") %>
+<body>
+    <main class="container-sm login-wrap d-flex align-items-center py-2">
+      <div class="row justify-content-center w-100">
+        <div class="col-12 col-lg-10 col-xl-9">
+          <div class="card login-card">
+            <div class="row g-0">
+              <aside class="col-lg-5 brand-panel p-4 p-md-5 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="brand-icon mb-4">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                  </div>
+                  <h1 class="h3 fw-bold mb-3">APB Online center</h1>
+                  <p class="mb-0 opacity-75">
+                    Find the best books, explore categories, and enjoy convenient online book shopping.
+                  </p>
+                </div>
+
+                <div class="mt-5 pt-4 small opacity-75">
+                  <p class="mb-2"><i class="fa-solid fa-circle-check me-2"></i> Secure admin access</p>
+                  <p class="mb-2"><i class="fa-solid fa-circle-check me-2"></i> Responsive management tools</p>
+                  <p class="mb-0"><i class="fa-solid fa-circle-check me-2"></i> Fast item updates</p>
+                </div>
+              </aside>
+
+              <section class="col-lg-7 form-panel p-4 p-md-5">
+                <div class="d-flex align-items-center gap-2 mb-3 d-lg-none">
+                  <i class="fa-solid fa-book-open text-primary"></i>
+                  <span class="fw-semibold">BookHub Admin</span>
+                </div>
+
+                <h2 class="h4 fw-bold mb-2">Welcome back</h2>
+                <p class="text-muted mb-4">Login to manage your shop inventory and featured listings.</p>
+
+               <form id="signupForm" class="row g-3 needs-validation" novalidate method="post" action="/apb/signup">
+
+                  <div class="mb-3">
+                    <label for="user-name" class="form-label fw-medium">username</label>
+
+                    <div class="input-group has-validation">
+                      
+                      <span class="input-group-text">
+                         <i class="fa-solid fa-user"></i>
+                      </span>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="user-name"
+                        name="username"
+                        placeholder="username"
+                        required
+                      >
+
+                      <div class="invalid-feedback">
+                        Please enter valid username.
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
+                  <div class="col-md-6 mb-3">
+                    <label for="user-first-name" class="form-label fw-medium">First Name</label>
+
+                    <div class="input-group has-validation">
+                      
+                      <span class="input-group-text">
+                       <i class="fa-solid fa-user"></i>
+                      </span>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="user-first-name"
+                        name="name"
+                        placeholder="enter your first name"
+                        required
+                      >
+
+                      <div class="invalid-feedback">
+                        Please enter your valid name.
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="user-last-name" class="form-label fw-medium">Last Name</label>
+
+                    <div class="input-group has-validation">
+                      
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-user-tag"></i>
+                      </span>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="user-last-name"
+                        name="last-name"
+                        placeholder="enter your last name"
+                        required
+                      >
+
+                      <div class="invalid-feedback">
+                        Please enter your valid last name.
+                      </div>
+
+                    </div>
+                  </div>
+
+                   <div class="mb-3">
+                    <label for="user-email" class="form-label fw-medium">Email</label>
+
+                    <div class="input-group has-validation">
+                      
+                      <span class="input-group-text">
+                        <i class="fa-regular fa-envelope"></i>
+                      </span>
+
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="user-email"
+                        name="email"
+                        placeholder="user@gmail.com"
+                        required
+                      >
+
+                      <div class="invalid-feedback">
+                        Please enter valid email.
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="mb-2">
+                    <label for="user-password" class="form-label fw-medium">Password</label>
+
+                    <div class="input-group has-validation">
+
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                      </span>
+
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="user-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        minlength="6"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="input-group-text"
+                        id="togglePassword"
+                        aria-label="Toggle password visibility"
+                      >
+                        <i class="fa-regular fa-eye"></i>
+                      </button>
+
+                      <div class="invalid-feedback">
+                        Password must be at least 6 characters.
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
+                  <div class="mb-2">
+                    <label for="user-password-check" class="form-label fw-medium">Confirm your Password</label>
+
+                    <div class="input-group has-validation">
+
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                      </span>
+
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="user-password-check"
+                        name="confirm-password"
+                        placeholder="Enter your password again"
+                        minlength="6"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="input-group-text"
+                        id="togglePassword"
+                        aria-label="Toggle password visibility"
+                      >
+                        <i class="fa-regular fa-eye"></i>
+                      </button>
+
+                      <div class="invalid-feedback">
+                        Password must be at least 6 characters.
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                  <button type="submit" class="btn btn-login w-100 py-2 mb-3">Sign in</button>
+                </form>
+                
+                <div class="text-center text-muted small">
+                    Do you have already an account?
+                    <a href="/apb/login" class="small-link">login</a>
+                  </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</body>
