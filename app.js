@@ -70,6 +70,9 @@ app.use((req, res, next) => {
     next();
 });
 
+// app.use("/",(req,res)=>{
+//     res.redirect("/apb/home");
+// })
 app.use("/apb/login", loginRouter);
 app.use("/apb/signup", signupRouter);
 app.use(homeRoutes);
