@@ -6,10 +6,13 @@ const productSchema = joi.object(
         description : joi.string().optional().allow(''),
         orginal_price : joi.number().optional(),
         rating : joi.number().optional(),
-        Selling_price : joi.number().required().min(5),
+        Selling_price : joi.number().required().min(0),
         Availability : joi.boolean().required().truthy('true').falsy('false'),
         image : joi.string().required(),
-        review_count : joi.string().optional().allow('').default('0'),
+        review_count : joi.alternatives().try(
+            joi.number(),
+            joi.string().allow('')
+        ).optional().default(0),
         badge: joi.string().optional().allow(''),
         status: joi.string().valid('instock','outofstock').optional(),
     }

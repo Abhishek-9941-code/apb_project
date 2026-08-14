@@ -45,6 +45,10 @@ router.post(
         console.log("REQ.FILE:", req.file);
         console.log("REQ.BODY:", req.body);
 
+        if (!req.file) {
+            return next(new ExpressError(400, "Image is required"));
+        }
+
         if (req.file) {
             req.body.image = req.file.path;
         }
