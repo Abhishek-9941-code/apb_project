@@ -1,4 +1,10 @@
 <% layout("/layout/boilerplat.ejs") %>
+<% if(error && error.length) { %>
+<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+  <%= error %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
 <body>
     <main class="container-sm login-wrap d-flex align-items-center py-2">
       <div class="row justify-content-center w-100">
@@ -74,7 +80,7 @@
                         type="text"
                         class="form-control"
                         id="user-first-name"
-                        name="name"
+                        name="first_name"
                         placeholder="enter your first name"
                         required
                       >
@@ -98,7 +104,7 @@
                         type="text"
                         class="form-control"
                         id="user-last-name"
-                        name="last-name"
+                        name="last_name"
                         placeholder="enter your last name"
                         required
                       >
@@ -185,7 +191,7 @@
                         type="password"
                         class="form-control"
                         id="user-password-check"
-                        name="confirm-password"
+                        name="confirm_password"
                         placeholder="Enter your password again"
                         minlength="6"
                         required

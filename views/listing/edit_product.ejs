@@ -1,0 +1,143 @@
+<%- layout("/layout/boilerplat.ejs") %>
+
+<section class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-3">
+        <li class="breadcrumb-item"><a href="/apb/home"><i class="fa fa-home me-1"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="/apb/top_product">All Products</a></li>
+        <li class="breadcrumb-item active">Edit Product</li>
+      </ol>
+    </nav>
+    <h1><i class="fa fa-pen-to-square me-2" style="font-size:1.8rem;vertical-align:middle;"></i>Edit Product</h1>
+    <p>Update the product details below</p>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+
+      <form action="/apb/fullproduct/<%= prod._id %>/edit"
+            method="POST"
+            class="needs-validation"
+            novalidate>
+        <br>
+
+        <p class="section-label"><i class="fa fa-tag"></i> Basic Details</p>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-8">
+            <label class="form-label">Product Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control"
+                   value="<%= prod.name || '' %>" required>
+            <div class="invalid-feedback">Product name is required.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Category <span class="text-danger">*</span></label>
+            <select name="Category" class="form-select" required>
+              <option value="" disabled>Select category</option>
+              <option value="books" <%= prod.Category === "books" ? "selected" : "" %>>📚 Books</option>
+              <option value="electronics" <%= prod.Category === "electronics" ? "selected" : "" %>>💻 Electronics</option>
+              <option value="study_materials" <%= prod.Category === "study_materials" ? "selected" : "" %>>🎓 Study Materials</option>
+              <option value="stationery" <%= prod.Category === "stationery" ? "selected" : "" %>>🖊️ Stationery</option>
+              <option value="other" <%= prod.Category === "other" ? "selected" : "" %>>📦 Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="4"><%= prod.description || "" %></textarea>
+          </div>
+        </div>
+
+        <p class="section-label"><i class="fa fa-indian-rupee-sign"></i> Pricing</p>
+
+        <div class="row g-3 mb-4 align-items-end">
+          <div class="col-sm-4">
+            <label class="form-label">Selling Price <span class="text-danger">*</span></label>
+            <div class="input-group price-group">
+              <span class="input-group-text">₹</span>
+              <input type="number" name="Selling_price" class="form-control"
+                     value="<%= prod.Selling_price || '' %>" min="0" required>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <label class="form-label">Original MRP</label>
+            <div class="input-group price-group">
+              <span class="input-group-text">₹</span>
+              <input type="number" name="orginal_price" class="form-control"
+                     value="<%= prod.orginal_price || '' %>" min="0">
+            </div>
+          </div>
+        </div>
+
+        <p class="section-label"><i class="fa fa-fire"></i> Product Status</p>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label d-block">Availability</label>
+            <div class="d-flex gap-2 mt-1">
+              <div class="status-option">
+                <input type="radio" name="status" id="inStock" value="instock"
+                       <%= prod.Availability ? "checked" : "" %>>
+                <label for="inStock"><i class="fa fa-check-circle me-1"></i>In Stock</label>
+              </div>
+
+              <div class="status-option">
+                <input type="radio" name="status" id="outStock" value="outofstock"
+                       <%= !prod.Availability ? "checked" : "" %>>
+                <label for="outStock"><i class="fa fa-times-circle me-1"></i>Out of Stock</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="section-label"><i class="fa fa-star"></i> Current Rating</p>
+
+        <div class="row g-3 mb-4">
+          <div class="col-sm-4">
+            <label class="form-label">Rating</label>
+            <input type="number" class="form-control"
+                   value="<%= prod.rating || 0 %>" readonly>
+            <small class="text-muted">Rating is calculated automatically from reviews.</small>
+          </div>
+
+          <div class="col-sm-4">
+            <label class="form-label">Review Count</label>
+            <input type="number" class="form-control"
+                   value="<%= prod.review_count || 0 %>" readonly>
+            <small class="text-muted">Review count is calculated automatically.</small>
+          </div>
+        </div>
+
+        <p class="section-label"><i class="fa fa-image"></i> Product Image</p>
+
+        <div class="mb-4">
+          <img src="<%= prod.image %>" alt="<%= prod.name %>"
+               style="width:160px;height:160px;object-fit:cover;border-radius:12px;border:1px solid var(--border);">
+          <p class="text-muted mt-2 mb-0">
+            Product image cannot be changed from this page.
+          </p>
+        </div>
+
+        <hr style="border-color:var(--border);margin:28px 0;">
+
+        <div class="d-flex flex-wrap gap-3 justify-content-end">
+          <a href="/apb/fullproduct/<%= prod._id %>" class="btn-reset">
+            <i class="fa fa-xmark me-2"></i>Cancel
+          </a>
+
+          <button type="submit" class="btn-submit">
+            <i class="fa fa-save me-2"></i>Save Changes
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

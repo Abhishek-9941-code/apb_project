@@ -7,18 +7,28 @@
         <h2 class="section-title mb-1">Top <span class="grad-text">Products</span></h2>
         <p class="section-sub mb-0">Hand-picked bestsellers just for you</p>
       </div>
-      <a href="/apb/add_product" class="btn-signup-nav" style="font-size:.82rem">Add product <i class="fa fa-arrow-right ms-1"></i></a>
+<% if (currUser && currUser.role === "owner") { %>
+
+  <a href="/apb/add_product"
+     class="btn-signup-nav"
+     style="font-size:.82rem">
+    Add product
+    <i class="fa fa-arrow-right ms-1"></i>
+  </a>
+
+<% } %>
     </div>
-    <div class="row g-4 scroll-reveal">
+    <div class="row g-5 scroll-reveal">
       <% for(let d of data)  { %>
         <!-- Card 1 -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="prod-card">
-            <div class="prod-img-wrap">
+         <div class="col-6 col-md-4 col-lg-3">
+          <div class="prod-card" onclick="window.location='/apb/fullproduct/<%= d._id %>'">
+      
+              <div class="prod-img-wrap">
               <img src=<%= d.image %> alt="Book">
               <span class="prod-badge">Bestseller</span>
               <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
+              </div>
             <div class="prod-body">
               <div class="prod-cat">
                 <%= d.Category %>
@@ -34,10 +44,14 @@
                 <span class="price-old">₹599</span>
                 <span class="price-save">37% off</span>
               </div>
+
               <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
             </div>
           </div>
         </div>
+       
+     
+  
       <% } %>
       <!-- Card 2 -->
       <!-- <div class="col-6 col-md-4 col-lg-3">

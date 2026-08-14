@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #<%= order.invoiceNumber %> - APB Online</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Font - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
+
+        body { background: #f4f1ff; }
+
+        /* Page actions bar (hidden on print) */
+        .action-bar {
+            background: white;
+            border-bottom: 1px solid #e8e0ff;
+            padding: 14px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .action-bar .d-flex { gap: 10px; }
+        .btn-print-invoice {
+            background: linear-gradient(135deg, #7b2ff7, #e91e8c);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 28px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-print-invoice:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-back {
+            background: white;
+            border: 1.5px solid #e0d7ff;
+            border-radius: 50px;
+            padding: 10px 22px;
+            color: #7b2ff7;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .btn-back:hover { background: #f3eaff; color: #7b2ff7; }
+
+        /* Invoice Wrapper */
+        .invoice-outer {
+            max-width: 780px;
+            margin: 30px auto;
+            padding-bottom: 40px;
+        }
+
+        .invoice-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 32px rgba(123, 47, 247, 0.12);
+        }
+
+        /* ---- HEADER ---- */
+        .inv-header {
+            background: linear-gradient(135deg, #7b2ff7 0%, #c0392b 55%, #e91e8c 100%);
+            padding: 32px 36px 28px;
+            color: white;
+            position: relative;
+        }
+        .inv-header .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .inv-header .logo-text span { color: #f9a8d4; }
+        .inv-header .store-tagline {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-top: 2px;
+        }
+        .paid-stamp {
+            position: absolute;
+            top: 28px;
+            right: 36px;
+            border: 2.5px solid rgba(255,255,255,0.55);
+            border-radius: 8px;
+            padding: 6px 18px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            opacity: 0.8;
+            transform: rotate(-8deg);
+        }
+        .inv-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 24px;
+        }
+        .inv-meta-row .label {
+            font-size: 10px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+        .inv-meta-row .inv-number {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .inv-meta-row .date-block {
+            text-align: right;
+            font-size: 12px;
+            opacity: 0.85;
+        }
+        .inv-meta-row .date-block strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        /* ---- CUSTOMER STRIP ---- */
+        .customer-strip {
+            background: #f8f5ff;
+            border-bottom: 1px solid #ede7ff;
+            padding: 18px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .cust-block .strip-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #7b2ff7;
+            margin-bottom: 4px;
+        }
+        .cust-block .cust-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .cust-block .cust-detail {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .order-meta { text-align: right; }
+        .order-meta .meta-row {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-bottom: 8px;
+        }
+        .order-meta .meta-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            color: #7b2ff7;
+        }
+        .order-meta .meta-val {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .pay-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, rgba(123,47,247,0.12), rgba(233,30,140,0.08));
+            color: #7b2ff7;
+            border-radius: 20px;
+            padding: 3px 14px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ---- ITEMS TABLE ---- */
+        .items-section { padding: 24px 36px; }
+
+        .items-section .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #7b2ff7;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .items-table thead tr {
+            background: #f8f5ff;
+            border-radius: 8px;
+        }
+        .items-table thead th {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            color: #888;
+            padding: 10px 12px;
+            border-bottom: 1px solid #ede7ff;
+        }
+        .items-table thead th:last-child,
+        .items-table thead th:nth-child(3),
+        .items-table thead th:nth-child(4) { text-align: right; }
+        .items-table thead th:nth-child(2) { text-align: center; }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid #f3eeff;
+            transition: background 0.15s;
+        }
+        .items-table tbody tr:hover { background: #fdf9ff; }
+        .items-table tbody tr:last-child { border-bottom: none; }
+        .items-table tbody td { padding: 14px 12px; vertical-align: middle; }
+
+        .product-cell { display: flex; align-items: center; gap: 14px; }
+        .product-img {
+            width: 50px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #ede7f6, #fce4ec);
+        }
+        .product-img-icon {
+            width: 50px;
+            height: 64px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .product-img-icon.col1 { background: #f0eaff; }
+        .product-img-icon.col2 { background: #fce4ec; }
+        .product-img-icon.col3 { background: #e0f7f1; }
+        .product-img-icon.col4 { background: #fff3e0; }
+
+        .product-info .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            line-height: 1.3;
+        }
+        .product-info .p-sub {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        .product-info .p-badge {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: #f0eaff;
+            color: #7b2ff7;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .qty-cell { text-align: center; font-size: 14px; font-weight: 600; color: #444; }
+        .rate-cell { text-align: right; font-size: 13px; color: #888; }
+        .amount-cell { text-align: right; font-size: 15px; font-weight: 700; color: #7b2ff7; }
+
+        /* ---- TOTALS ---- */
+        .totals-section {
+            background: #f8f5ff;
+            border-top: 1px solid #ede7ff;
+            padding: 20px 36px;
+        }
+        .totals-inner {
+            max-width: 300px;
+            margin-left: auto;
+        }
+        .t-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+            color: #666;
+        }
+        .t-row .t-val { font-weight: 500; color: #333; }
+        .t-row .t-val.green { color: #2e7d32; }
+        .t-row.t-total {
+            border-top: 2px solid #e0d7ff;
+            margin-top: 8px;
+            padding-top: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .t-row.t-total .t-val { color: #7b2ff7; font-size: 20px; }
+        .savings-pill {
+            background: linear-gradient(90deg, rgba(123,47,247,0.08), rgba(233,30,140,0.05));
+            border: 1px solid rgba(123,47,247,0.15);
+            border-radius: 10px;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #7b2ff7;
+            font-weight: 600;
+            margin-top: 14px;
+        }
+        .savings-pill span { color: #e91e8c; }
+
+        /* ---- FOOTER ---- */
+        .inv-footer {
+            border-top: 1px solid #f0eaff;
+            padding: 20px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+        }
+        .inv-footer .thanks-msg {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .inv-footer .thanks-msg span { color: #7b2ff7; }
+        .inv-footer .policy-note {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+        .inv-footer .auth-block { text-align: right; }
+        .inv-footer .auth-block .auth-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #aaa;
+            font-weight: 600;
+        }
+        .inv-footer .auth-block .auth-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .inv-footer .auth-block .gstin {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        /* ---- PRINT STYLES ---- */
+        @media print {
+            body { background: white !important; }
+            .action-bar { display: none !important; }
+            .invoice-outer { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+            .invoice-card { box-shadow: none !important; border-radius: 0 !important; }
+            .inv-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .items-table thead tr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media (max-width: 600px) {
+            .inv-header, .customer-strip, .items-section, .totals-section, .inv-footer { padding-left: 18px; padding-right: 18px; }
+            .customer-strip { flex-direction: column; }
+            .order-meta { text-align: left; }
+            .order-meta .meta-row { align-items: flex-start; }
+            .inv-footer { flex-direction: column; }
+            .inv-footer .auth-block { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Action Bar (hidden on print) -->
+    <div class="action-bar">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="/cart" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Cart
+                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <span style="font-size:0.82rem; color:#888;">Invoice #<%= order.invoiceNumber %></span>
+                    <button class="btn-print-invoice" id="printBtn">
+                        <i class="fas fa-print"></i> Print Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice -->
+    <div class="container">
+        <div class="invoice-outer">
+            <div class="invoice-card" id="invoice">
+
+                <!-- HEADER -->
+                <div class="inv-header">
+                    <div class="paid-stamp">PAID</div>
+                    <div class="logo-text"><i class="fas fa-book-open me-2"></i>APB <span>Online</span></div>
+                    <div class="store-tagline">Your one-stop destination for books, electronics & study materials</div>
+                    <div class="inv-meta-row">
+                        <div>
+                            <div class="label">Invoice Number</div>
+                            <div class="inv-number">#<%= order.invoiceNumber %></div>
+                        </div>
+                        <div class="date-block">
+                            <strong><%= new Date(order.createdAt).toLocaleDateString('en-IN', {day:'numeric', month:'long', year:'numeric'}) %></strong>
+                            Order Date
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUSTOMER STRIP -->
+                <div class="customer-strip">
+                    <div class="cust-block">
+                        <div class="strip-label"><i class="fas fa-user me-1"></i>Billed To</div>
+                        <div class="cust-name"><%= user.name %></div>
+                        <div class="cust-detail"><i class="fas fa-map-marker-alt me-1" style="color:#7b2ff7;"></i><%= order.shippingAddress %></div>
+                        <div class="cust-detail"><i class="fas fa-phone me-1" style="color:#7b2ff7;"></i><%= user.phone %></div>
+                        <div class="cust-detail"><i class="fas fa-envelope me-1" style="color:#7b2ff7;"></i><%= user.email %></div>
+                    </div>
+                    <div class="order-meta">
+                        <div class="meta-row">
+                            <div class="meta-label">Order ID</div>
+                            <div class="meta-val">#<%= order._id.toString().slice(-8).toUpperCase() %></div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">Payment Method</div>
+                            <div class="pay-badge"><i class="fas fa-lock me-1"></i><%= order.paymentMethod %></div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">Status</div>
+                            <div class="meta-val" style="color:#2e7d32;"><i class="fas fa-check-circle me-1"></i>Confirmed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="items-section">
+                    <div class="section-title">
+                        <i class="fas fa-box-open"></i> Ordered Items
+                    </div>
+
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width:45%">Product</th>
+                                <th style="width:10%">Qty</th>
+                                <th style="width:20%">Unit Price</th>
+                                <th style="width:15%">Discount</th>
+                                <th style="width:10%">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% const iconColors = ['col1','col2','col3','col4']; %>
+                            <% const icons = ['📚','📖','🔖','📒']; %>
+                            <% order.items.forEach(function(item, index){ %>
+                            <% const lineTotal = item.price * item.quantity; %>
+                            <% const discountAmt = item.originalPrice ? (item.originalPrice - item.price) * item.quantity : 0; %>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <% if(item.image){ %>
+                                            <img src="<%= item.image %>" alt="<%= item.name %>" class="product-img">
+                                        <% } else { %>
+                                            <div class="product-img-icon <%= iconColors[index % 4] %>"><%= icons[index % 4] %></div>
+                                        <% } %>
+                                        <div class="product-info">
+                                            <div class="p-name"><%= item.name %></div>
+                                            <% if(item.author){ %><div class="p-sub">by <%= item.author %></div><% } %>
+                                            <% if(item.category){ %><div class="p-badge"><%= item.category %></div><% } %>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="qty-cell"><%= item.quantity %></td>
+                                <td class="rate-cell">
+                                    ₹<%= item.price.toLocaleString('en-IN') %>
+                                    <% if(item.originalPrice && item.originalPrice > item.price){ %>
+                                        <div style="font-size:10px;text-decoration:line-through;color:#ccc;">₹<%= item.originalPrice.toLocaleString('en-IN') %></div>
+                                    <% } %>
+                                </td>
+                                <td class="rate-cell" style="color:#2e7d32;">
+                                    <% if(discountAmt > 0){ %>− ₹<%= discountAmt.toLocaleString('en-IN') %><% } else { %>—<% } %>
+                                </td>
+                                <td class="amount-cell">₹<%= lineTotal.toLocaleString('en-IN') %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTALS -->
+                <div class="totals-section">
+                    <div class="totals-inner">
+                        <div class="t-row">
+                            <span>Subtotal (<%= order.items.reduce((s,i) => s + i.quantity, 0) %> items)</span>
+                            <span class="t-val">₹<%= order.subtotal.toLocaleString('en-IN') %></span>
+                        </div>
+                        <div class="t-row">
+                            <span>Product Discount</span>
+                            <span class="t-val green">− ₹<%= order.totalDiscount.toLocaleString('en-IN') %></span>
+                        </div>
+                        <% if(order.promoDiscount && order.promoDiscount > 0){ %>
+                        <div class="t-row">
+                            <span>Promo Code (<%= order.promoCode %>)</span>
+                            <span class="t-val green">− ₹<%= order.promoDiscount.toLocaleString('en-IN') %></span>
+                        </div>
+                        <% } %>
+                        <div class="t-row">
+                            <span>Delivery Charges</span>
+                            <% if(order.deliveryCharge === 0){ %>
+                                <span class="t-val green"><i class="fas fa-truck me-1"></i>FREE</span>
+                            <% } else { %>
+                                <span class="t-val">₹<%= order.deliveryCharge %></span>
+                            <% } %>
+                        </div>
+                        <div class="t-row">
+                            <span>GST (5%)</span>
+                            <span class="t-val">₹<%= order.gst.toLocaleString('en-IN') %></span>
+                        </div>
+                        <div class="t-row t-total">
+                            <span>Total Payable</span>
+                            <span class="t-val">₹<%= order.totalAmount.toLocaleString('en-IN') %></span>
+                        </div>
+                        <% if(order.totalDiscount > 0){ %>
+                        <div class="savings-pill">
+                            🎉 You saved <span>₹<%= order.totalDiscount.toLocaleString('en-IN') %></span> on this order!
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="inv-footer">
+                    <div>
+                        <div class="thanks-msg">Thank you for shopping with <span>APB Online</span>! 🙏</div>
+                        <div class="policy-note"><i class="fas fa-undo me-1"></i>Items returnable within 7 days of delivery.</div>
+                        <div class="policy-note"><i class="fas fa-headset me-1"></i>Support: support@apbonline.in &nbsp;|&nbsp; apbonline.in</div>
+                    </div>
+                    <div class="auth-block">
+                        <div class="auth-label">Authorized By</div>
+                        <div class="auth-name">APB Online Store</div>
+                        <div class="gstin">GSTIN: 08ABCDE1234F1Z5</div>
+                        <div style="margin-top:8px; border-top:1.5px solid #ddd; padding-top:6px;">
+                            <div style="font-size:10px; color:#bbb; font-style:italic;">Digital Signature</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end invoice-card -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <script>
+        // Print button — logic baad mein add karein
+        document.getElementById('printBtn').addEventListener('click', function () {
+            window.print();
+            // Future: yahan PDF download ya custom print logic add kar sakte ho
+        });
+    </script>
+
+</body>
+</html>

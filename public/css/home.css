@@ -11,6 +11,7 @@
       --border: rgba(108,61,232,0.12);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { min-height: 100%; }
     body { font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; overflow-x: hidden; }
 
     /* ── NAVBAR ── */
@@ -71,10 +72,15 @@
     /* ── HERO ── */
     .hero {
       background: var(--grad);
-      min-height: 88vh;
+      min-height: 100vh;
       position: relative;
       overflow: hidden;
       display: flex; align-items: center;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      width: 100vw;
     }
     .hero::before {
       content: '';
@@ -184,6 +190,8 @@
     .prod-img-wrap { position: relative; overflow: hidden; }
     .prod-img-wrap img { width: 100%; height: 200px; object-fit: cover; transition: transform .4s; }
     .prod-card:hover .prod-img-wrap img { transform: scale(1.07); }
+    #top-products .prod-img-wrap img,
+    .search-results .prod-img-wrap img { object-fit: contain; }
     .prod-badge {
       position: absolute; top: 12px; left: 12px;
       background: var(--grad); color: #fff;
@@ -312,3 +320,29 @@
       .hero-stats { gap: 18px; }
       .nl-form { flex-direction: column; }
     }
+
+    .drawer-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    color: #333;
+}
+.drawer-nav-item:hover { background: #f5f0ff; }
+.drawer-nav-item:hover .drawer-nav-label { color: #7b2ff7; }
+.drawer-nav-item:hover .drawer-nav-icon { background: #7b2ff7; color: white; }
+.drawer-nav-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: #f3e8ff;
+    color: #7b2ff7;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+.drawer-nav-label { font-size: 14px; font-weight: 500; }
+.drawer-nav-sub { font-size: 11px; color: #999; margin-top: 1px; }

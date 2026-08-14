@@ -1,0 +1,112 @@
+<% layout("/layout/boilerplat.ejs") %>
+
+<section class="section-pad" id="most-rated">
+  <div class="container">
+
+    <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
+      <div>
+        <h2 class="section-title mb-1">
+          Most <span class="grad-text">Rated</span>
+        </h2>
+
+        <p class="section-sub mb-0">
+          Top rated products by our community
+        </p>
+      </div>
+
+      
+    </div>
+
+    <div class="row g-5 scroll-reveal">
+
+      <% for(let d of data) { %>
+
+        <div class="col-6 col-md-4 col-lg-3">
+
+          <div class="prod-card"
+               onclick="window.location='/apb/fullproduct/<%= d._id %>'">
+
+            <div class="prod-img-wrap">
+
+              <img src="<%= d.image %>"
+                   alt="<%= d.name %>">
+
+              <span class="prod-badge">Top Rated</span>
+
+              <div class="prod-wishlist"
+                   onclick="event.stopPropagation()">
+                <i class="fa-regular fa-heart"></i>
+              </div>
+
+            </div>
+
+            <div class="prod-body">
+
+              <div class="prod-cat">
+                <%= d.Category %>
+              </div>
+
+              <div class="prod-name">
+                <%= d.name %>
+              </div>
+
+              <div class="stars">
+
+                <%
+                  let rating = Number(d.rating) || 0;
+
+                  for(let i = 1; i <= 5; i++) {
+                    if(i <= Math.round(rating)) {
+                %>
+
+                  ★
+
+                <% } else { %>
+
+                  ☆
+
+                <% } } %>
+
+                <span>
+                  (<%= d.review_count %>)
+                </span>
+
+              </div>
+
+              <div class="prod-price">
+                <span class="price-new">
+                  ₹<%= d.Selling_price %>
+                </span>
+              </div>
+
+              <form action="/addCart/<%= d._id %>"
+                    method="POST"
+                    onclick="event.stopPropagation()">
+
+                <input type="hidden"
+                       name="quantity"
+                       value="1">
+
+                <button type="submit"
+                        class="btn-cart"
+                        onclick="event.stopPropagation()">
+
+                  <i class="fa-solid fa-cart-plus me-2"></i>
+                  Add to Cart
+
+                </button>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <% } %>
+
+    </div>
+
+  </div>
+</section>

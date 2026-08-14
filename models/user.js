@@ -12,12 +12,17 @@ const userschema=new mongoose.Schema({
     },
     last_name:{
         type:String,
-        required:true
+        required:false
     },
     email:{
         type:String,
         required:true
     },
+    role:{
+        type: String,
+        required:true,
+        default: 'customer'
+    }
 })
 
 userschema.plugin(plm)

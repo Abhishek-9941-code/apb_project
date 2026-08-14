@@ -2,29 +2,176 @@
 <nav class="navbar-apb">
   <div class="container">
     <div class="d-flex align-items-center gap-3 w-100">
-      <a href="#" class="brand text-decoration-none"><i class="fa-solid fa-book-open-reader"></i>APB Online</a>
+      <a href="/apb/home" class="brand text-decoration-none"><i class="fa-solid fa-book-open-reader"></i>APB Online</a>
 
-      <div class="search-wrap">
-        <input type="text" placeholder="Search books, electronics, stationery…">
-        <button><i class="fa fa-search me-1"></i>Search</button>
+      <!-- SEARCH -->
+      <div class="search-wrap" style="position:relative;">
+        <input type="text" id="searchInput" placeholder="Search books, electronics, stationery…" autocomplete="off">
+        <button onclick="doSearch()"><i class="fa fa-search me-1"></i>Search</button>
+
+        <!-- Dropdown -->
+        <div id="searchDropdown" style="
+          display:none;
+          position:absolute;
+          top:calc(100% + 6px);
+          left:0; right:0;
+          background:white;
+          border:1px solid #ede7ff;
+          border-radius:14px;
+          box-shadow:0 8px 24px rgba(123,47,247,0.12);
+          z-index:9999;
+          overflow:hidden;
+        "></div>
       </div>
 
       <div class="nav-links d-none d-xl-flex ms-auto">
-        <a href="#">Home</a>
-        <a href="#categories">Categories</a>
-        <a href="#top-products">Top Products</a>
-        <a href="#rated">Most Rated</a>
+        <a href="/apb/home">Home</a>
+        <a href="/apb/home#categories">Categories</a>
+        <a href="/apb/home#top-products">Top Products</a>
+        <a href="/apb/most-rated">Most Rated</a>
       </div>
 
       <div class="nav-icons ms-2">
-        <a href="#" title="Cart">
+        <a href="/apb/cart" title="Cart">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="badge-cart">3</span>
         </a>
-        <a href="#" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
-        <a href="#" title="Account"><i class="fa-regular fa-user"></i></a>
+        <a href="/apb/home" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
+        <% if(currUser) { %>
+          <a href="/apb/home" class="me-2" title="My Profile"><i class="fa-solid fa-user"></i></a>
+        <% } %>
+        <button type="button" onclick="openAccountDrawer()" style="background:none;border:none;padding:0;margin:0;color:inherit;cursor:pointer;outline:none;">
+          <i class="fa-solid fa-user-circle"></i>
+        </button>
       </div>
-      <a href="/apb/login" class="btn-signup-nav ms-1"><i class="fa-solid fa-arrow-right-to-bracket me-1"></i>login</a>
+
+      <% if(!isAuthenticated){ %>
+        <a href="/apb/login" class="btn-signup-nav ms-1"><i class="fa-solid fa-arrow-right-to-bracket me-1"></i>login</a>
+      <% } %>
     </div>
   </div>
 </nav>
+
+<!-- Overlay -->
+<div id="accountOverlay" 
+     onclick="closeAccountDrawer()" 
+     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:999;">
+</div>
+
+<!-- Account Drawer -->
+<div id="accountDrawer" 
+     style="position:fixed; top:0; right:-320px; width:300px; height:100vh;
+            background:white; z-index:1000; 
+            transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+            box-shadow:-4px 0 20px rgba(0,0,0,0.12);">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#7b2ff7 0%,#e91e8c 100%); 
+                padding:28px 20px 22px; position:relative;">
+        
+        <button onclick="closeAccountDrawer()" 
+                style="position:absolute; top:14px; right:14px; width:28px; height:28px; 
+                       border-radius:50%; background:rgba(255,255,255,0.2); 
+                       border:none; cursor:pointer; color:white; font-size:14px;">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div style="width:56px; height:56px; border-radius:50%; 
+                    background:rgba(255,255,255,0.25); 
+                    border:2px solid rgba(255,255,255,0.5);
+                    display:flex; align-items:center; justify-content:center; 
+                    font-size:22px; font-weight:600; color:white; margin-bottom:10px;">
+            <% if(currUser) { %>
+                <%= (currUser.first_name || currUser.username || 'U').charAt(0).toUpperCase() %>
+            <% } else { %>
+                <i class="fas fa-user"></i>
+            <% } %>
+        </div>
+
+        <% if(currUser) { %>
+            <div style="font-size:15px; font-weight:600; color:white;">
+                <%= currUser.first_name || currUser.username %>
+            </div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.75); margin-top:2px;">
+                <%= currUser.email %>
+            </div>
+        <% } else { %>
+            <div style="font-size:15px; font-weight:600; color:white;">Guest User</div>
+            <a href="/apb/login" style="font-size:12px; color:rgba(255,255,255,0.8);">
+                Login / Sign Up →
+            </a>
+        <% } %>
+    </div>
+
+    <!-- Nav Items -->
+    <div style="flex:1; padding:10px 0; overflow-y:auto;">
+
+        <% if(currUser) { %>
+
+            <a href="/apb/home" class="drawer-nav-item">
+                <div class="drawer-nav-icon"><i class="fas fa-user-circle"></i></div>
+                <div>
+                    <div class="drawer-nav-label">My Profile</div>
+                    <div class="drawer-nav-sub">Personal details & settings</div>
+                </div>
+                <i class="fas fa-chevron-right" style="margin-left:auto; color:#ccc; font-size:12px;"></i>
+            </a>
+
+            <a href="/apb/home" class="drawer-nav-item">
+                <div class="drawer-nav-icon"><i class="fas fa-box"></i></div>
+                <div>
+                    <div class="drawer-nav-label">My Orders</div>
+                    <div class="drawer-nav-sub">Track & manage orders</div>
+                </div>
+                <i class="fas fa-chevron-right" style="margin-left:auto; color:#ccc; font-size:12px;"></i>
+            </a>
+
+            <a href="/apb/home" class="drawer-nav-item">
+                <div class="drawer-nav-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div>
+                    <div class="drawer-nav-label">Addresses</div>
+                    <div class="drawer-nav-sub">Saved delivery locations</div>
+                </div>
+                <i class="fas fa-chevron-right" style="margin-left:auto; color:#ccc; font-size:12px;"></i>
+            </a>
+
+            <hr style="margin:8px 20px; border:none; border-top:1px solid #f0f0f0;">
+
+            <a href="/apb/logout" class="drawer-nav-item" 
+               style="--hover-bg:#fff0f3;">
+                <div class="drawer-nav-icon" 
+                     style="background:#fce4ec; color:#e91e8c;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <div class="drawer-nav-label">Logout</div>
+            </a>
+
+        <% } else { %>
+
+            <a href="/apb/login" class="drawer-nav-item">
+                <div class="drawer-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+                <div>
+                    <div class="drawer-nav-label">Login</div>
+                    <div class="drawer-nav-sub">Access your account</div>
+                </div>
+            </a>
+
+            <a href="/apb/signup" class="drawer-nav-item">
+                <div class="drawer-nav-icon"><i class="fas fa-user-plus"></i></div>
+                <div>
+                    <div class="drawer-nav-label">Sign Up</div>
+                    <div class="drawer-nav-sub">Create new account</div>
+                </div>
+            </a>
+
+        <% } %>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:12px 20px; border-top:1px solid #f5f5f5; 
+                text-align:center; font-size:11px; color:#bbb;">
+        Ankit Pustak Bhandar
+    </div>
+</div>

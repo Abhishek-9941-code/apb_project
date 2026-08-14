@@ -1,6 +1,12 @@
 <% layout("/layout/boilerplat.ejs") %>
 
-<body>
+<% if(success && success.length) { %>
+<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+  <%= success %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
@@ -119,35 +125,76 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
       <div>
-        <h2 class="section-title mb-1">Top <span class="grad-text">Products</span></h2>
-        <p class="section-sub mb-0">Hand-picked bestsellers just for you</p>
+        <h2 class="section-title mb-1">All <span class="grad-text">Products</span></h2>
+        <p class="section-sub mb-0">Explore our products</p>
       </div>
       <a href="/apb/top_product" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
     </div>
     <div class="row g-4 scroll-reveal">
       <!-- Card 1 -->
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="prod-card">
-          <div class="prod-img-wrap">
-            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" alt="Book">
-            <span class="prod-badge">Bestseller</span>
-            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prod-body">
-            <div class="prod-cat">Books</div>
-            <div class="prod-name">The Psychology of Money</div>
-            <div class="stars">★★★★★ <span>(1.2k)</span></div>
-            <div class="prod-price">
-              <span class="price-new">₹379</span>
-              <span class="price-old">₹599</span>
-              <span class="price-save">37% off</span>
-            </div>
-            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
-          </div>
+<% for(let item of allProducts) { %>
+
+  <div class="col-6 col-md-4 col-lg-3">
+
+    <div class="prod-card"
+         onclick="window.location='/apb/fullproduct/<%= item._id %>'">
+
+      <div class="prod-img-wrap">
+
+        <img src="<%= item.image %>" alt="<%= item.name %>">
+
+        <span class="prod-badge">Bestseller</span>
+
+        <div class="prod-wishlist"
+             onclick="event.stopPropagation()">
+          <i class="fa-regular fa-heart"></i>
         </div>
+
       </div>
+
+      <div class="prod-body">
+
+        <div class="prod-cat">
+          <%= item.Category %>
+        </div>
+
+        <div class="prod-name">
+          <%= item.name %>
+        </div>
+
+        <div class="stars">
+          ★★★★★
+          <span>(<%= item.review_count %>)</span>
+        </div>
+
+        <div class="prod-price">
+          <span class="price-new">
+            ₹<%= item.Selling_price %>
+          </span>
+        </div>
+
+        <form action="/addCart/<%= item._id %>"
+              method="POST"
+              onclick="event.stopPropagation()">
+
+          <input type="hidden" name="quantity" value="1">
+
+          <button type="submit" class="btn-cart">
+            <i class="fa-solid fa-cart-plus me-2"></i>
+            Add to Cart
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<% } %>
       <!-- Card 2 -->
-      <div class="col-6 col-md-4 col-lg-3">
+      <!-- <div class="col-6 col-md-4 col-lg-3">
         <div class="prod-card">
           <div class="prod-img-wrap">
             <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400" alt="Laptop">
@@ -166,9 +213,9 @@
             <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- Card 3 -->
-      <div class="col-6 col-md-4 col-lg-3">
+      <!-- <div class="col-6 col-md-4 col-lg-3">
         <div class="prod-card">
           <div class="prod-img-wrap">
             <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" alt="Study">
@@ -187,9 +234,9 @@
             <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- Card 4 -->
-      <div class="col-6 col-md-4 col-lg-3">
+      <!-- <div class="col-6 col-md-4 col-lg-3">
         <div class="prod-card">
           <div class="prod-img-wrap">
             <img src="https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=400" alt="Stationery">
@@ -207,8 +254,8 @@
             </div>
             <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
           </div>
-        </div>
-      </div>
+        </div> -->
+      
     </div>
   </div>
 </section>
@@ -221,46 +268,55 @@
         <h2 class="section-title mb-1">Most <span class="grad-text">Rated</span></h2>
         <p class="section-sub mb-0">Top rated by our community</p>
       </div>
-      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+      <a href="/apb/most-rated" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
     </div>
     <div class="rated-row scroll-reveal">
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300" alt="">
-        <div class="ri-name">Atomic Habits</div>
-        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(2.4k)</span></div>
-        <div class="ri-price">₹499</div>
+
+  <% for(let item of mostRated) { %>
+
+    <div class="rated-item"
+         onclick="window.location='/apb/fullproduct/<%= item._id %>'"
+         style="cursor:pointer;">
+
+      <img src="<%= item.image %>"
+           alt="<%= item.name %>">
+
+      <div class="ri-name">
+        <%= item.name %>
       </div>
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300" alt="">
-        <div class="ri-name">Polaroid Camera</div>
-        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(1.1k)</span></div>
-        <div class="ri-price">₹3,299</div>
+
+      <div class="ri-stars">
+
+        <% 
+          let rating = Number(item.rating) || 0;
+
+          for(let i = 1; i <= 5; i++) {
+            if(i <= Math.round(rating)) {
+        %>
+
+          ★
+
+        <% } else { %>
+
+          ☆
+
+        <% } } %>
+
+        <span style="color:#9CA3AF;font-size:.72rem">
+          (<%= item.review_count %>)
+        </span>
+
       </div>
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=300" alt="">
-        <div class="ri-name">iPhone Stand Pro</div>
-        <div class="ri-stars">★★★★☆ <span style="color:#9CA3AF;font-size:.72rem">(890)</span></div>
-        <div class="ri-price">₹699</div>
+
+      <div class="ri-price">
+        ₹<%= item.Selling_price %>
       </div>
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300" alt="">
-        <div class="ri-name">Harry Potter Box Set</div>
-        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(5.6k)</span></div>
-        <div class="ri-price">₹1,899</div>
-      </div>
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300" alt="">
-        <div class="ri-name">Smart Notebook A5</div>
-        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(720)</span></div>
-        <div class="ri-price">₹349</div>
-      </div>
-      <div class="rated-item">
-        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=300" alt="">
-        <div class="ri-name">Rich Dad Poor Dad</div>
-        <div class="ri-stars">★★★★★ <span style="color:#9CA3AF;font-size:.72rem">(4.2k)</span></div>
-        <div class="ri-price">₹299</div>
-      </div>
+
     </div>
+
+  <% } %>
+
+</div>
   </div>
 </section>
 
@@ -316,82 +372,118 @@
   </div>
 </section>
 
-<!-- ═══════════════ MORE PRODUCTS ═══════════════ -->
-<section class="section-pad">
+<!-- ═══════════════ NEW ARRIVALS ═══════════════ -->
+<section class="section-pad" id="new-arrivals">
   <div class="container">
+
     <div class="d-flex justify-content-between align-items-end mb-4 scroll-reveal">
       <div>
-        <h2 class="section-title mb-1">New <span class="grad-text">Arrivals</span></h2>
-        <p class="section-sub mb-0">Fresh picks added this week</p>
+        <h2 class="section-title mb-1">
+          New <span class="grad-text">Arrivals</span>
+        </h2>
+
+        <p class="section-sub mb-0">
+          Fresh picks, just added to the store
+        </p>
       </div>
-      <a href="#" class="btn-signup-nav" style="font-size:.82rem">View All <i class="fa fa-arrow-right ms-1"></i></a>
+
+      <a href="/apb/new-arrivals" class="btn-signup-nav" style="font-size:.82rem">
+        View All
+        <i class="fa fa-arrow-right ms-1"></i>
+      </a>
     </div>
+
     <div class="row g-4 scroll-reveal">
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="prod-card">
-          <div class="prod-img-wrap">
-            <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=400" alt="">
-            <span class="prod-badge">New</span>
-            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
+
+      <% for(let item of newArrivals) { %>
+
+        <div class="col-6 col-md-4 col-lg-3">
+
+          <div class="prod-card"
+               onclick="window.location='/apb/fullproduct/<%= item._id %>'">
+
+            <div class="prod-img-wrap">
+
+              <img src="<%= item.image %>"
+                   alt="<%= item.name %>">
+
+              <span class="prod-badge">New</span>
+
+              <div class="prod-wishlist"
+                   onclick="event.stopPropagation()">
+                <i class="fa-regular fa-heart"></i>
+              </div>
+
+            </div>
+
+            <div class="prod-body">
+
+              <div class="prod-cat">
+                <%= item.Category %>
+              </div>
+
+              <div class="prod-name">
+                <%= item.name %>
+              </div>
+
+              <div class="stars">
+
+                <% 
+                  let rating = Number(item.rating) || 0;
+
+                  for(let i = 1; i <= 5; i++) {
+                    if(i <= Math.round(rating)) {
+                %>
+
+                  ★
+
+                <% } else { %>
+
+                  ☆
+
+                <% } } %>
+
+                <span>
+                  (<%= item.review_count %>)
+                </span>
+
+              </div>
+
+              <div class="prod-price">
+                <span class="price-new">
+                  ₹<%= item.Selling_price %>
+                </span>
+              </div>
+
+              <form action="/addCart/<%= item._id %>"
+                    method="POST"
+                    onclick="event.stopPropagation()">
+
+                <input type="hidden"
+                       name="quantity"
+                       value="1">
+
+                <button type="submit"
+                        class="btn-cart"
+                        onclick="event.stopPropagation()">
+
+                  <i class="fa-solid fa-cart-plus me-2"></i>
+                  Add to Cart
+
+                </button>
+
+              </form>
+
+            </div>
+
           </div>
-          <div class="prod-body">
-            <div class="prod-cat">Books</div>
-            <div class="prod-name">Rich Dad Poor Dad – Special Ed.</div>
-            <div class="stars">★★★★★ <span>(4.2k)</span></div>
-            <div class="prod-price"><span class="price-new">₹299</span><span class="price-old">₹449</span><span class="price-save">33%</span></div>
-            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
-          </div>
+
         </div>
-      </div>
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="prod-card">
-          <div class="prod-img-wrap">
-            <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400" alt="">
-            <span class="prod-badge">Trending</span>
-            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prod-body">
-            <div class="prod-cat">Stationery</div>
-            <div class="prod-name">Rocketbook Smart Reusable Notebook</div>
-            <div class="stars">★★★★☆ <span>(720)</span></div>
-            <div class="prod-price"><span class="price-new">₹849</span><span class="price-old">₹1,299</span><span class="price-save">35%</span></div>
-            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="prod-card">
-          <div class="prod-img-wrap">
-            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400" alt="">
-            <span class="prod-badge">Popular</span>
-            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prod-body">
-            <div class="prod-cat">Electronics</div>
-            <div class="prod-name">Fujifilm Instax Mini Polaroid</div>
-            <div class="stars">★★★★★ <span>(1.1k)</span></div>
-            <div class="prod-price"><span class="price-new">₹3,299</span><span class="price-old">₹4,999</span><span class="price-save">34%</span></div>
-            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="prod-card">
-          <div class="prod-img-wrap">
-            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400" alt="">
-            <span class="prod-badge">Classic</span>
-            <div class="prod-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prod-body">
-            <div class="prod-cat">Books</div>
-            <div class="prod-name">Harry Potter Complete Box Set</div>
-            <div class="stars">★★★★★ <span>(5.6k)</span></div>
-            <div class="prod-price"><span class="price-new">₹1,899</span><span class="price-old">₹2,999</span><span class="price-save">37%</span></div>
-            <button class="btn-cart"><i class="fa-solid fa-cart-plus me-2"></i>Add to Cart</button>
-          </div>
-        </div>
-      </div>
+
+      <% } %>
+
     </div>
+
   </div>
 </section>
 
@@ -466,7 +558,3 @@
     </div>
   </div>
 </section>
-
-
-
-</body>

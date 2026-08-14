@@ -1,0 +1,200 @@
+<!-- <% layout("/layout/boilerplat.ejs") %> -->
+
+<!-- Cart Page Header -->
+<div class="cart-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item">
+                    <a href="/apb/home">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">My Cart</li>
+            </ol>
+        </nav>
+
+        <h2>
+            <i class="fas fa-shopping-cart me-2"></i>
+            My Cart
+            <span class="item-count-pill" style="color: black;">
+                <%= cartItems.length %> Items
+            </span>
+        </h2>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- LEFT: Cart Items -->
+        <div class="col-lg-8">
+
+            <div class="cart-card">
+
+                <div class="cart-card-header">
+                    <i class="fas fa-box-open me-2"></i> Cart Items
+                </div>
+
+                <% for(var i = 0 ; i < cartItems.length; i++) { %>
+
+                    <div class="cart-item">
+
+                        <div class="cart-item-img-placeholder">
+            <% if(cartItems[i].product.image) { %>
+                <img 
+                    src="<%= cartItems[i].product.image %>" 
+                    alt="<%= cartItems[i].product.name %>"
+                    style="width:100%; height:100%; object-fit:cover; border-radius:10px;"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <span style="display:none; width:100%; height:100%; align-items:center; justify-content:center;">
+                    <i class="fas fa-book" style="font-size:2rem; color:#b39ddb;"></i>
+                </span>
+            <% } else { %>
+                <i class="fas fa-book" style="font-size:2rem; color:#b39ddb;"></i>
+            <% } %>
+        </div>
+
+                        <div class="cart-item-details">
+
+                            <div class="item-name">
+                                <%= cartItems[i].product.name %>
+                            </div>
+
+                            <div class="item-author">
+                                <%= cartItems[i].product.description %>
+                            </div>
+
+                            <span class="item-category">
+                                <%= cartItems[i].product.Category %>
+                            </span>
+
+                            <div>
+                                <span class="item-price">
+                                    ₹<%= cartItems[i].product.Selling_price %>
+                                </span>
+                            </div>
+
+                            <div class="qty-control">
+                                
+
+                            <b>Quantity : </b>    <span><%= cartItems[i].quantity %></span>
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn-remove" title="Remove item">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+
+                    </div>
+
+                <% } %>
+
+                <!-- Clear Cart -->
+                <div class="d-flex justify-content-end">
+                    <button
+                        class="btn btn-sm"
+                        style="color:#e91e8c;border:1px solid #f8bbd0;border-radius:50px;padding:6px 20px;font-size:0.82rem;font-weight:500;background:white;"
+                    >
+                        <i class="fas fa-times me-1"></i>
+                        Clear Cart
+                    </button>
+                </div>
+
+            </div> <!-- cart-card -->
+
+        </div> <!-- col-lg-8 -->
+
+        <% let count = 0 %>
+        <% let total_sum = 0 %>
+        <% for(let i = 0 ; i < cartItems.length; i++) { %>
+           <% count+=1; %>
+           <% total_sum += cartItems[i].product.Selling_price*cartItems[i].quantity %>
+        <% } %>
+        <!-- RIGHT: Order Summary -->
+        <div class="col-lg-4">
+
+            <div class="summary-card">
+
+                <a href="/apb/order-summary">
+                    <h5>
+                        <i class="fas fa-receipt me-2" style="color:#7b2ff7;"></i>
+                        Order Summary
+                    </h5>
+                </a>
+
+                <div class="free-delivery-badge">
+                    <i class="fas fa-truck"></i>
+                    <span>Free delivery on this order!</span>
+                </div>
+
+                <div class="savings-highlight">
+                    🎉 You're saving <span>Ankit Pustak Bhandar</span> on this order!
+                </div>
+
+                <div class="summary-row">
+                    <span class="label">Subtotal (<%= count %>)</span>
+                    <span class="value"><%= total_sum %></span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="label">Discount</span>
+                    <span class="value discount">
+                        <i class="fas fa-tag me-1"></i>- ₹750
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="label">Delivery Charges</span>
+                    <span class="value discount">
+                        <i class="fas fa-truck me-1"></i>FREE
+                    </span>
+                </div>
+
+                <hr class="summary-divider">
+
+                <div class="summary-total">
+                    <span>Total Amount</span>
+                    <span class="total-price"><%= total_sum %></span>
+                </div>
+
+                <a href="/apb/order-summary" class="btn-checkout">
+                    <i class="fas fa-lock"></i>
+                    Proceed to Checkout
+                </a>
+
+                <a href="/apb/home#top-products" class="btn-continue">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Continue Shopping
+                </a>
+
+                <div class="promo-section">
+                    <label>
+                        <i class="fas fa-tag me-1"></i>
+                        Have a promo code?
+                    </label>
+
+                    <div class="promo-input-group">
+                        <input
+                            type="text"
+                            class="promo-input"
+                            placeholder="Enter code"
+                        >
+                        <button class="btn-apply">Apply</button>
+                    </div>
+                </div>
+
+                <div class="secure-badge">
+                    <i class="fas fa-shield-alt" style="color:#7b2ff7;"></i>
+                    100% Secure Checkout
+                </div>
+
+            </div>
+
+        </div> <!-- col-lg-4 -->
+
+    </div> <!-- row -->
+</div> <!-- container -->

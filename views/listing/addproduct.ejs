@@ -1,6 +1,13 @@
 
 <%- layout("/layout/boilerplat.ejs") %>
 
+<% if(addProduct && addProduct.length) { %>
+<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+  <%= addProduct %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
 <body>
 
      <!-- include("../include/header.ejs")  -->
@@ -25,8 +32,8 @@
         <div class="row justify-content-center">
             <div class="col-12 col-xl-10">
                 <!-- <div class="form-card"> -->
-                    <form id="addProductForm" action="/product/add" method="POST" enctype="multipart/form-data" novalidate>
-
+                    <form id="addProductForm" action="/product/add" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+                        <br> 
                         <!-- ── BASIC DETAILS ── -->
                         <p class="section-label"><i class="fa fa-tag"></i> Basic Details</p>
 
@@ -120,7 +127,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <label class="form-label">Review Count</label>
-                                <input type="text" name="reviews" class="form-control" placeholder="e.g. 1.2k">
+                                <input type="text" name="review_count" class="form-control" placeholder="e.g. 1.2k">
                             </div>
                         </div>
 
@@ -142,7 +149,7 @@
                             </div>
                         </div> -->
 
-                        <input type="file" name="image" id="imageInput" class="form-control mb-4">
+                        <input type="file" name="image" id="imageInput" class="form-control mb-4" required>
                         <!-- ── ACTION BUTTONS ── -->
                         <hr style="border-color: var(--border); margin: 28px 0;">
                         <div class="d-flex flex-wrap gap-3 justify-content-end">

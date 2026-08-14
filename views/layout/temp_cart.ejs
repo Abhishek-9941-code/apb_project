@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - APB Online</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Font - Poppins (same as site) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        /* ---- Page Header ---- */
+        .cart-header {
+            background: linear-gradient(135deg, #7b2ff7 0%, #c0392b 60%, #e91e8c 100%);
+            padding: 30px 0 24px;
+            color: white;
+        }
+
+        .cart-header h2 {
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        .cart-header .breadcrumb-item a {
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+        }
+
+        .cart-header .breadcrumb-item.active {
+            color: white;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ---- Cart Card ---- */
+        .cart-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(123, 47, 247, 0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .cart-card-header {
+            background: linear-gradient(90deg, rgba(123, 47, 247, 0.06), rgba(233, 30, 140, 0.04));
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0eaff;
+            font-weight: 600;
+            color: #4a148c;
+            font-size: 0.95rem;
+        }
+
+        /* ---- Cart Item ---- */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid #f5f5f5;
+            gap: 16px;
+            transition: background 0.2s;
+        }
+
+        .cart-item:hover {
+            background: #faf8ff;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #ede7f6, #fce4ec);
+        }
+
+        .cart-item-img-placeholder {
+            width: 80px;
+            height: 100px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #ede7f6, #fce4ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9c27b0;
+            font-size: 2rem;
+        }
+
+        .cart-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-details .item-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cart-item-details .item-author {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-details .item-category {
+            display: inline-block;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, rgba(123, 47, 247, 0.1), rgba(233, 30, 140, 0.08));
+            color: #7b2ff7;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-details .item-price {
+            font-weight: 700;
+            color: #7b2ff7;
+            font-size: 1.05rem;
+        }
+
+        .cart-item-details .item-price-original {
+            font-size: 0.82rem;
+            color: #aaa;
+            text-decoration: line-through;
+            margin-left: 6px;
+        }
+
+        /* Quantity control */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #e0d7ff;
+            border-radius: 50px;
+            overflow: hidden;
+            width: fit-content;
+            margin-top: 10px;
+        }
+
+        .qty-control button {
+            background: none;
+            border: none;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            color: #7b2ff7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .qty-control button:hover {
+            background: #f3eaff;
+        }
+
+        .qty-control span {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        /* Remove button */
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 1.1rem;
+            padding: 6px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-remove:hover {
+            color: #e91e8c;
+            transform: scale(1.15);
+        }
+
+        /* ---- Order Summary ---- */
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(123, 47, 247, 0.08);
+            padding: 24px;
+            position: sticky;
+            top: 80px;
+        }
+
+        .summary-card h5 {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0eaff;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 0.9rem;
+        }
+
+        .summary-row .label {
+            color: #666;
+        }
+
+        .summary-row .value {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .summary-row .value.discount {
+            color: #2e7d32;
+        }
+
+        .summary-divider {
+            border: none;
+            border-top: 1px dashed #e0d7ff;
+            margin: 16px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .summary-total .total-price {
+            color: #7b2ff7;
+            font-size: 1.3rem;
+        }
+
+        /* Checkout Button */
+        .btn-checkout {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #7b2ff7 0%, #e91e8c 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-checkout:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-checkout:active {
+            transform: translateY(0);
+        }
+
+        /* Continue Shopping */
+        .btn-continue {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 1.5px solid #e0d7ff;
+            border-radius: 50px;
+            color: #7b2ff7;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+        }
+
+        .btn-continue:hover {
+            background: #f3eaff;
+            color: #7b2ff7;
+        }
+
+        /* Promo code */
+        .promo-section {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #f0eaff;
+        }
+
+        .promo-section label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .promo-input {
+            flex: 1;
+            border: 1.5px solid #e0d7ff;
+            border-radius: 50px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .promo-input:focus {
+            border-color: #7b2ff7;
+        }
+
+        .btn-apply {
+            background: linear-gradient(135deg, #7b2ff7, #e91e8c);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: opacity 0.2s;
+        }
+
+        .btn-apply:hover {
+            opacity: 0.85;
+        }
+
+        /* Free delivery badge */
+        .free-delivery-badge {
+            background: linear-gradient(90deg, rgba(46, 125, 50, 0.08), rgba(46, 125, 50, 0.04));
+            border: 1px solid rgba(46, 125, 50, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: #2e7d32;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .free-delivery-badge i {
+            font-size: 1rem;
+        }
+
+        /* Secure badge */
+        .secure-badge {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Empty cart */
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, #7b2ff7, #e91e8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h4 {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .empty-cart p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .btn-shop-now {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #7b2ff7, #e91e8c);
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 16px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .btn-shop-now:hover {
+            opacity: 0.9;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Item count pill */
+        .item-count-pill {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(123,47,247,0.1), rgba(233,30,140,0.07));
+            border-radius: 50px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7b2ff7;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* savings highlight */
+        .savings-highlight {
+            background: linear-gradient(90deg, rgba(123, 47, 247, 0.06), rgba(233, 30, 140, 0.04));
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: #7b2ff7;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .savings-highlight span {
+            color: #e91e8c;
+        }
+
+        @media (max-width: 768px) {
+            .cart-item-img, .cart-item-img-placeholder {
+                width: 65px;
+                height: 82px;
+            }
+            .summary-card {
+                position: static;
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <%- include("../include/header.ejs") %>
+
+    <!-- Cart Page Header -->
+    <div class="cart-header">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="/apb/home"><i class="fas fa-home me-1"></i>Home</a></li>
+                    <li class="breadcrumb-item active">My Cart</li>
+                </ol>
+            </nav>
+            <h2><i class="fas fa-shopping-cart me-2"></i>My Cart <span class="item-count-pill">3 Items</span></h2>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-4">
+
+            <!-- ======= LEFT: Cart Items ======= -->
+            <div class="col-lg-8">
+
+                <div class="cart-card">
+                    <div class="cart-card-header">
+                        <i class="fas fa-box-open me-2"></i> Cart Items
+                    </div>
+
+                    <!-- Cart Item 1 -->
+                    <div class="cart-item">
+                        <div class="cart-item-img-placeholder">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="item-name">Atomic Habits</div>
+                            <div class="item-author">by James Clear</div>
+                            <span class="item-category">Self Help</span>
+                            <div>
+                                <span class="item-price">₹499</span>
+                                <span class="item-price-original">₹799</span>
+                            </div>
+                            <div class="qty-control">
+                                <button type="button" onclick="changeQty(this, -1)"><i class="fas fa-minus"></i></button>
+                                <span>1</span>
+                                <button type="button" onclick="changeQty(this, 1)"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn-remove" title="Remove item">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Item 2 -->
+                    <div class="cart-item">
+                        <div class="cart-item-img-placeholder">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="item-name">Zero to One</div>
+                            <div class="item-author">by Peter Thiel</div>
+                            <span class="item-category">Business</span>
+                            <div>
+                                <span class="item-price">₹349</span>
+                                <span class="item-price-original">₹550</span>
+                            </div>
+                            <div class="qty-control">
+                                <button type="button" onclick="changeQty(this, -1)"><i class="fas fa-minus"></i></button>
+                                <span>2</span>
+                                <button type="button" onclick="changeQty(this, 1)"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn-remove" title="Remove item">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Item 3 -->
+                    <div class="cart-item">
+                        <div class="cart-item-img-placeholder">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="item-name">The Lean Startup</div>
+                            <div class="item-author">by Eric Ries</div>
+                            <span class="item-category">Entrepreneurship</span>
+                            <div>
+                                <span class="item-price">₹399</span>
+                                <span class="item-price-original">₹649</span>
+                            </div>
+                            <div class="qty-control">
+                                <button type="button" onclick="changeQty(this, -1)"><i class="fas fa-minus"></i></button>
+                                <span>1</span>
+                                <button type="button" onclick="changeQty(this, 1)"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn-remove" title="Remove item">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Clear Cart -->
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm" style="color:#e91e8c; border:1px solid #f8bbd0; border-radius:50px; padding:6px 20px; font-size:0.82rem; font-weight:500; background:white;">
+                        <i class="fas fa-times me-1"></i> Clear Cart
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- ======= RIGHT: Order Summary ======= -->
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <h5><i class="fas fa-receipt me-2" style="color:#7b2ff7;"></i>Order Summary</h5>
+
+                    <!-- Free delivery notice -->
+                    <div class="free-delivery-badge">
+                        <i class="fas fa-truck"></i>
+                        <span>Free delivery on this order!</span>
+                    </div>
+
+                    <!-- Savings -->
+                    <div class="savings-highlight">
+                        🎉 You're saving <span>₹750</span> on this order!
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="label">Subtotal (4 items)</span>
+                        <span class="value">₹1,596</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Discount</span>
+                        <span class="value discount"><i class="fas fa-tag me-1"></i>- ₹750</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Delivery Charges</span>
+                        <span class="value discount"><i class="fas fa-truck me-1"></i>FREE</span>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-total">
+                        <span>Total Amount</span>
+                        <span class="total-price">₹1,246</span>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <a href="/apb/order-summary" class="btn-checkout">
+                        <i class="fas fa-lock"></i> Proceed to Checkout
+                    </a>
+
+                    <!-- Continue Shopping -->
+                    <a href="/apb/home#top-products" class="btn-continue">
+                        <i class="fas fa-arrow-left me-1"></i> Continue Shopping
+                    </a>
+
+                    <!-- Promo Code -->
+                    <div class="promo-section">
+                        <label><i class="fas fa-tag me-1"></i>Have a promo code?</label>
+                        <div class="promo-input-group">
+                            <input type="text" class="promo-input" placeholder="Enter code">
+                            <button class="btn-apply">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- Secure badge -->
+                    <div class="secure-badge">
+                        <i class="fas fa-shield-alt" style="color:#7b2ff7;"></i>
+                        100% Secure Checkout
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end row -->
+    </div><!-- end container -->
+
+    <%- include("../include/footer.ejs") %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <script>
+        function changeQty(btn, delta) {
+            const control = btn.parentElement;
+            const span = control.querySelector('span');
+            let qty = parseInt(span.textContent);
+            qty = Math.max(1, qty + delta);
+            span.textContent = qty;
+        }
+
+        // Remove item with animation
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const item = this.closest('.cart-item');
+                item.style.transition = 'opacity 0.3s, transform 0.3s';
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(30px)';
+                setTimeout(() => item.remove(), 300);
+            });
+        });
+    </script>
+</body>
+</html>

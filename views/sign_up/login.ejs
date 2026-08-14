@@ -1,4 +1,16 @@
 <% layout("/layout/boilerplat.ejs") %>
+<% if(register && register.length) { %>
+<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+  <%= register %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+<% if(error && error.length) { %>
+<div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+  <%= error %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
 <body>
     <main class="container login-wrap d-flex align-items-center py-4">
       <div class="row justify-content-center w-100">
@@ -34,25 +46,25 @@
 
                <form id="loginForm" class="row g-3 needs-validation" novalidate method="post" action="/apb/login">
                   <div class="mb-3">
-                    <label for="email" class="form-label fw-medium">Email address</label>
+                    <label for="username" class="form-label fw-medium">Username</label>
 
                     <div class="input-group has-validation">
                       
                       <span class="input-group-text">
-                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-regular fa-user"></i>
                       </span>
 
                       <input
-                        type="email"
+                        type="text"
                         class="form-control"
-                        id="email"
-                        name="email"
-                        placeholder="admin@bookhub.com"
+                        id="username"
+                        name="username"
+                        placeholder="admin_username"
                         required
-                      >
+                      />
 
                       <div class="invalid-feedback">
-                        Please enter a valid email address.
+                        Please enter a valid username.
                       </div>
 
                     </div>
