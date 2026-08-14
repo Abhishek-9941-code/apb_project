@@ -15,7 +15,10 @@ const validateProduct = (req, res, next) => {
     const result = productSchema.validate(req.body, { allowUnknown: true });
     console.log("VALIDATION RESULT:", result.error);
     if (result.error) {
-        throw new ExpressError(400, result.error.details[0].message);
+        const message = result.error.details[0].message;
+        console.log("VALIDATION ERROR:", message);
+        req.flash("error", message);
+        return res.redirect("/apb/add_product");
     }
     next();
 };
@@ -94,7 +97,8 @@ router.post(
             res.redirect("/apb/add_product");
         } catch (err) {
             console.error("PRODUCT CREATE ERROR:", err);
-            next(err);
+            req.flash("error", "Error adding product: " + err.message);
+            res.redirect("/apb/add_product");
         }
     }
 );

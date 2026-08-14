@@ -96,6 +96,19 @@ app.use(productRoutes);
 app.use(debugRoutes);
 app.use("/apb/fullproduct/:id", productDetailRouter);
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    const { statusCode = 500, message = "Something went wrong!" } = err;
+    console.error("ERROR:", err);
+    
+    if (req.xhr || req.headers.accept?.includes('application/json')) {
+        return res.status(statusCode).json({ error: message });
+    }
+    
+    req.flash("error", message);
+    res.redirect("/apb/home");
+});
+
 app.listen(8081, () => {
     console.log("we are listening on port no 8081");
 });
