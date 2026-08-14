@@ -80,3 +80,5 @@ app.use("/apb/fullproduct/:id", productDetailRouter);
 app.listen(8081, () => {
     console.log("we are listening on port no 8081");
 });
+
+module.exports = app;
