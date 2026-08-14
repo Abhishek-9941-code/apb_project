@@ -86,7 +86,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/",(req,res)=>{
+app.get("/",(req,res)=>{
     res.redirect("/apb/home");
 })
 app.use("/apb/login", loginRouter);
