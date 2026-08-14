@@ -67,8 +67,24 @@ router.post(
             delete data.reviews;
             delete data.status;
 
-            if (!data.review_count) {
+            // Convert review_count to number
+            if (data.review_count) {
+                data.review_count = parseInt(data.review_count) || 0;
+            } else {
                 data.review_count = 0;
+            }
+
+            // Convert rating to number if present
+            if (data.rating) {
+                data.rating = parseFloat(data.rating);
+            }
+
+            // Convert prices to numbers
+            if (data.Selling_price) {
+                data.Selling_price = parseFloat(data.Selling_price);
+            }
+            if (data.orginal_price) {
+                data.orginal_price = parseFloat(data.orginal_price);
             }
 
             const newProduct = await product.create(data);

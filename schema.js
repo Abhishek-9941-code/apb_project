@@ -4,10 +4,10 @@ const productSchema = joi.object(
         name : joi.string().required(),
         Category : joi.string().required(),
         description : joi.string().optional().allow(''),
-        orginal_price : joi.number().optional(),
-        rating : joi.number().optional(),
+        orginal_price : joi.number().optional().allow(null),
+        rating : joi.number().optional().allow(null),
         Selling_price : joi.number().required().min(0),
-        Availability : joi.boolean().required().truthy('true').falsy('false'),
+        Availability : joi.boolean().required(),
         image : joi.string().required(),
         review_count : joi.alternatives().try(
             joi.number(),
