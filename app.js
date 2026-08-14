@@ -57,6 +57,22 @@ mongoose.connect(mongourl)
         console.log("error occur in database connection : ", err);
     });
 
+if (process.env.RENDER_EXTERNAL_URL) {
+    const KEEP_ALIVE_URL = `${process.env.RENDER_EXTERNAL_URL}/health`;
+    const INTERVAL_MS = 14 * 60 * 1000; // 14 minutes
+
+    setInterval(async () => {
+        try {
+            await fetch(KEEP_ALIVE_URL);
+        } catch (_) {
+            // Non-critical — don't crash if the ping fails
+        }
+    }, INTERVAL_MS);
+
+    console.log(`[keep-alive] pinging ${KEEP_ALIVE_URL} every 14 min`);
+}
+
+
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.review = req.flash("review");
@@ -70,9 +86,9 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use("/",(req,res)=>{
-//     res.redirect("/apb/home");
-// })
+app.use("/",(req,res)=>{
+    res.redirect("/apb/home");
+})
 app.use("/apb/login", loginRouter);
 app.use("/apb/signup", signupRouter);
 app.use(homeRoutes);
