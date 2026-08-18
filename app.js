@@ -19,6 +19,7 @@ const signupRouter = require("./routes/signup_route.js");
 const productDetailRouter = require("./routes/product_detail.js");
 const homeRoutes = require("./routes/homeRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
+const ownerRoutes = require("./routes/ownerRoutes.js");
 const debugRoutes = require("./routes/debugRoutes.js");
 
 const app = express();
@@ -93,6 +94,7 @@ app.use("/apb/login", loginRouter);
 app.use("/apb/signup", signupRouter);
 app.use(homeRoutes);
 app.use(productRoutes);
+app.use(ownerRoutes);
 app.use(debugRoutes);
 app.use("/apb/fullproduct/:id", productDetailRouter);
 
@@ -100,11 +102,13 @@ app.use("/apb/fullproduct/:id", productDetailRouter);
 app.use((err, req, res, next) => {
     const { statusCode = 500, message = "Something went wrong!" } = err;
     console.error("ERROR:", err);
-    
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
+
+    const wantsJson = req.xhr || req.path.startsWith('/api/') || (req.headers.accept && req.headers.accept.includes('application/json'));
+
+    if (wantsJson) {
         return res.status(statusCode).json({ error: message });
     }
-    
+
     req.flash("error", message);
     res.redirect("/apb/home");
 });

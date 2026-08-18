@@ -1,0 +1,165 @@
+<% layout('/layout/boilerplat.ejs') %>
+<style>
+  .analytics-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .analytics-chart-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 0.9fr;
+    gap: 1.5rem;
+  }
+
+  .analytics-card-canvas {
+    position: relative;
+    min-height: 180px;
+  }
+
+  @media (max-width: 991.98px) {
+    .analytics-summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .analytics-chart-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .analytics-summary-grid {
+      grid-template-columns: 1fr;
+    }
+    .analytics-card-canvas {
+      min-height: 150px;
+    }
+    .analytics-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 12px;
+    }
+  }
+</style>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 analytics-header">
+    <div>
+      <h2 class="mb-1">Business Analytics</h2>
+      <p class="text-muted mb-0">Owner performance overview</p>
+    </div>
+    <a href="/apb/owner/dashboard" class="btn btn-outline-secondary">Dashboard</a>
+  </div>
+
+  <div class="analytics-summary-grid mb-4">
+    <div class="card shadow-sm border-0"><div class="card-body"><div class="text-muted small">Revenue</div><h4 id="summaryRevenue">₹<%= summary.revenue %></h4></div></div>
+    <div class="card shadow-sm border-0"><div class="card-body"><div class="text-muted small">Cost</div><h4 id="summaryCost">₹<%= summary.cost %></h4></div></div>
+    <div class="card shadow-sm border-0"><div class="card-body"><div class="text-muted small">Profit</div><h4 id="summaryProfit">₹<%= summary.profit %></h4></div></div>
+    <div class="card shadow-sm border-0"><div class="card-body"><div class="text-muted small">Orders</div><h4 id="summaryOrders"><%= summary.orders %></h4></div></div>
+  </div>
+
+  <div class="analytics-chart-grid mb-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body analytics-card-canvas">
+        <h5>Revenue, cost and profit</h5>
+        <canvas id="dailyChart" height="120"></canvas>
+      </div>
+    </div>
+    <div class="card shadow-sm border-0">
+      <div class="card-body analytics-card-canvas">
+        <h5>Units sold</h5>
+        <canvas id="unitsChart" height="170"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5>6-month trend</h5>
+      <canvas id="sixMonthChart" height="110"></canvas>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h5>Business insights</h5>
+      <ul id="insightsList" class="mb-0"></ul>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const currency = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(value || 0));
+
+  function setCardText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  async function loadAnalytics() {
+    const dailyRes = await fetch('/api/owner/analytics/daily');
+    const daily = await dailyRes.json();
+    const monthRes = await fetch('/api/owner/analytics/six-months');
+    const months = await monthRes.json();
+
+    setCardText('summaryRevenue', currency(daily.revenue || 0));
+    setCardText('summaryCost', currency(daily.cost || 0));
+    setCardText('summaryProfit', currency(daily.profit || 0));
+    setCardText('summaryOrders', daily.orders || 0);
+
+    const dailyChart = new Chart(document.getElementById('dailyChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Revenue', 'Cost', 'Profit'],
+        datasets: [{
+          label: 'Today',
+          data: [daily.revenue || 0, daily.cost || 0, daily.profit || 0],
+          backgroundColor: ['#7b2ff7', '#f59e0b', '#10b981']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    const unitsChart = new Chart(document.getElementById('unitsChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Units sold', 'Remaining'],
+        datasets: [{
+          data: [daily.unitsSold || 0, Math.max(0, 100 - (daily.unitsSold || 0))],
+          backgroundColor: ['#7b2ff7', '#e5e7eb']
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    const monthChart = new Chart(document.getElementById('sixMonthChart'), {
+      type: 'line',
+      data: {
+        labels: months.map(item => item.label || 'Month'),
+        datasets: [
+          { label: 'Revenue', data: months.map(item => item.revenue || 0), borderColor: '#7b2ff7', fill: false, tension: 0.25 },
+          { label: 'Profit', data: months.map(item => item.profit || 0), borderColor: '#10b981', fill: false, tension: 0.25 }
+        ]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    const list = document.getElementById('insightsList');
+    const insights = [
+      daily.profit >= 0 ? `Today's profit is ${currency(daily.profit)}.` : `Today's loss is ${currency(Math.abs(daily.profit))}.`,
+      `Today recorded ${daily.orders || 0} orders and ${daily.unitsSold || 0} units sold.`,
+      months.length ? `Latest month revenue is ${currency(months[months.length - 1].revenue || 0)}.` : 'No monthly data yet.'
+    ];
+    list.innerHTML = insights.map(item => `<li>${item}</li>`).join('');
+  }
+
+  const isOwner = <%= !!(currUser && currUser.role === 'owner') %>;
+  if (!isOwner) {
+    alert('Please login as owner to view analytics.');
+    window.location.href = '/apb/login';
+  } else {
+    loadAnalytics();
+  }
+</script>

@@ -9,11 +9,33 @@ const productSchema1 = new Schema({
 
     Category: String,
 
+    company: {
+        type: String,
+        default: "General"
+    },
+
+    brand: {
+        type: String,
+        default: "General"
+    },
+
     description: String,
 
     orginal_price: Number,
 
+    costPrice: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+
     Selling_price: Number,
+
+    stock: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
 
     rating: {
         type: Number,

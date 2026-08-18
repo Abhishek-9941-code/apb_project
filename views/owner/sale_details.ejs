@@ -1,0 +1,70 @@
+<% layout('/layout/boilerplat.ejs') %>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Sale Details</h2>
+      <p class="text-muted mb-0">Invoice summary and product breakdown</p>
+    </div>
+    <a href="/apb/owner/sales-history" class="btn btn-outline-secondary">Back to history</a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <h5>Customer Information</h5>
+          <p class="mb-1"><strong>Name:</strong> <%= sale.customerName || sale.customerId?.name || 'N/A' %></p>
+          <p class="mb-1"><strong>Phone:</strong> <%= sale.customerPhone || sale.customerId?.phone || 'N/A' %></p>
+          <p class="mb-1"><strong>Email:</strong> <%= sale.customerEmail || sale.customerId?.email || 'N/A' %></p>
+          <p class="mb-0"><strong>Address:</strong> <%= sale.customerAddress || sale.customerId?.address || 'N/A' %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h5>Products</h5>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Company</th>
+                  <th>Qty</th>
+                  <th>Sell Price</th>
+                  <th>Cost</th>
+                  <th>Revenue</th>
+                  <th>Profit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.forEach(item => { %>
+                  <tr>
+                    <td><%= item.productName %></td>
+                    <td><%= item.company || 'General' %></td>
+                    <td><%= item.quantity %></td>
+                    <td>₹<%= item.sellingPriceSnapshot %></td>
+                    <td>₹<%= item.costPriceSnapshot %></td>
+                    <td>₹<%= item.revenue %></td>
+                    <td>₹<%= item.profit %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="card-body">
+      <h5>Total</h5>
+      <div class="row">
+        <div class="col-md-4"><strong>Revenue:</strong> ₹<%= sale.totalAmount %></div>
+        <div class="col-md-4"><strong>Cost:</strong> ₹<%= sale.totalCost %></div>
+        <div class="col-md-4"><strong>Profit:</strong> ₹<%= sale.totalProfit %></div>
+      </div>
+    </div>
+  </div>
+</div>

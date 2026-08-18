@@ -1,0 +1,298 @@
+<% layout('/layout/boilerplat.ejs') %>
+<style>
+  .owner-sale-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.9fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 991.98px) {
+    .owner-sale-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .owner-sale-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 12px;
+    }
+    .product-row .border {
+      min-width: 0;
+    }
+    .btn.btn-sm {
+      min-height: 38px;
+    }
+  }
+</style>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 owner-sale-header">
+    <div>
+      <h2 class="mb-1">Offline Sale</h2>
+      <p class="text-muted mb-0">Record in-shop sales for walk-in customers</p>
+    </div>
+    <a href="/apb/owner/dashboard" class="btn btn-outline-secondary">Back to dashboard</a>
+  </div>
+
+  <div class="owner-sale-grid">
+    <div>
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <h5 class="mb-3">Search products</h5>
+          <label for="productSearch" class="visually-hidden">Search products</label>
+          <input id="productSearch" class="form-control" placeholder="Search by name or category..." aria-label="Search products" />
+          <div class="mt-3 row g-2" id="productList">
+            <% products.forEach(product => { %>
+              <%
+                const available = product.Availability !== false && Number(product.stock || 0) > 0;
+              %>
+              <div class="col-md-6 product-row" data-name="<%= product.name.toLowerCase() %>" data-category="<%= product.Category.toLowerCase() %>">
+                <div class="border rounded p-3 h-100">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong><%= product.name %></strong><br>
+                      <small class="text-muted"><%= product.Category %> · <%= product.company || 'General' %></small>
+                    </div>
+                    <span class="badge <%= available ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' %>">
+                      <%= available ? 'In Stock' : 'Out of Stock' %>
+                    </span>
+                  </div>
+                  <div class="mt-3 d-flex justify-content-between align-items-center">
+                    <div>
+                      <div>₹<%= product.Selling_price %></div>
+                      <small class="text-muted">Cost: ₹<%= product.orginal_price || product.costPrice || 0 %></small>
+                    </div>
+                    <button
+                      class="btn btn-sm <%= available ? 'btn-primary' : 'btn-secondary' %> add-to-cart"
+                      data-product-id="<%= product._id %>"
+                      data-product-name="<%= product.name %>"
+                      data-company="<%= product.company || 'General' %>"
+                      data-category="<%= product.Category %>"
+                      data-selling-price="<%= product.Selling_price %>"
+                      data-cost-price="<%= product.orginal_price || product.costPrice || 0 %>"
+                      <%= available ? '' : 'disabled' %>
+                    >
+                      <%= available ? 'Add to cart' : 'Unavailable' %>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="mb-3">Offline cart</h5>
+          <div id="cartItems"></div>
+
+          <div class="mt-4 border-top pt-3">
+            <div class="d-flex justify-content-between"><span>Revenue</span><strong id="summaryRevenue">₹0</strong></div>
+            <div class="d-flex justify-content-between"><span>Cost</span><strong id="summaryCost">₹0</strong></div>
+          </div>
+
+          <div class="mt-4">
+            <h6>Customer details</h6>
+            <div class="mb-2"><label for="customerName" class="visually-hidden">Customer name</label><input id="customerName" class="form-control" placeholder="Customer name" aria-label="Customer name" required></div>
+            <div class="mb-2"><label for="customerPhone" class="visually-hidden">Phone</label><input id="customerPhone" class="form-control" placeholder="Phone" aria-label="Phone" required></div>
+            <div class="mb-2"><label for="customerEmail" class="visually-hidden">Email</label><input id="customerEmail" class="form-control" placeholder="Email (optional)" aria-label="Email"></div>
+            <div class="mb-2"><label for="customerAddress" class="visually-hidden">Address</label><textarea id="customerAddress" class="form-control" rows="2" placeholder="Address (optional)" aria-label="Address"></textarea></div>
+            <div class="mb-2">
+              <label for="paymentMethod" class="visually-hidden">Payment method</label>
+              <select id="paymentMethod" class="form-select" aria-label="Payment method">
+                <option value="cash">Cash</option>
+                <option value="upi">UPI</option>
+                <option value="card">Card</option>
+                <option value="bank-transfer">Bank Transfer</option>
+                <option value="credit">Credit</option>
+              </select>
+            </div>
+            <button id="confirmSale" class="btn btn-success w-100">Confirm Sale</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cart = [];
+
+  function formatCurrency(value) {
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(value || 0));
+  }
+
+  function calculateItem(sellingPrice, costPrice, quantity) {
+    const qty = Number(quantity || 0);
+    const selling = Number(sellingPrice || 0);
+    const cost = Number(costPrice || 0);
+    const revenue = selling * qty;
+    const itemCost = cost * qty;
+    const profit = revenue - itemCost;
+    return { revenue, cost: itemCost, profit };
+  }
+
+  function renderCart() {
+    const container = document.getElementById('cartItems');
+    if (!cart.length) {
+      container.innerHTML = '<div class="text-muted">No products added yet.</div>';
+      document.getElementById('summaryRevenue').textContent = '₹0';
+      document.getElementById('summaryCost').textContent = '₹0';
+      return;
+    }
+
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    container.innerHTML = cart.map((item, index) => {
+      const totals = calculateItem(item.sellingPrice, item.costPrice, item.quantity);
+      totalRevenue += totals.revenue;
+      totalCost += totals.cost;
+
+      return `
+        <div class="border rounded p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong>${item.name}</strong><br>
+              <small class="text-muted">${item.company} · ${item.category}</small>
+            </div>
+            <button class="btn btn-sm btn-outline-danger remove-item" data-index="${index}">Remove</button>
+          </div>
+          <div class="mt-3 d-flex justify-content-between align-items-center">
+            <label class="mb-0">Qty</label>
+            <div class="input-group input-group-sm" style="width:120px;">
+              <button class="btn btn-outline-secondary change-qty" data-index="${index}" data-delta="-1" type="button">-</button>
+              <input type="number" class="form-control text-center" value="${item.quantity}" min="1" data-index="${index}" data-field="quantity" />
+              <button class="btn btn-outline-secondary change-qty" data-index="${index}" data-delta="1" type="button">+</button>
+            </div>
+          </div>
+          <div class="mt-2 text-end">
+            <small>Revenue: ${formatCurrency(totals.revenue)} · Cost: ${formatCurrency(totals.cost)} · Profit: ${formatCurrency(totals.profit)}</small>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('summaryRevenue').textContent = formatCurrency(totalRevenue);
+    document.getElementById('summaryCost').textContent = formatCurrency(totalCost);
+
+    document.querySelectorAll('.remove-item').forEach(button => {
+      button.addEventListener('click', () => {
+        cart.splice(Number(button.dataset.index), 1);
+        renderCart();
+      });
+    });
+
+    document.querySelectorAll('.change-qty').forEach(button => {
+      button.addEventListener('click', () => {
+        const index = Number(button.dataset.index);
+        const delta = Number(button.dataset.delta);
+        const updated = Math.max(1, Number(cart[index].quantity || 1) + delta);
+        cart[index].quantity = updated;
+        renderCart();
+      });
+    });
+
+    document.querySelectorAll('input[data-field="quantity"]').forEach(input => {
+      input.addEventListener('change', () => {
+        const index = Number(input.dataset.index);
+        const value = Math.max(1, Number(input.value || 1));
+        cart[index].quantity = value;
+        renderCart();
+      });
+    });
+  }
+
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', () => {
+      const existing = cart.find(item => item.productId === button.dataset.productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: button.dataset.productId,
+          name: button.dataset.productName,
+          company: button.dataset.company,
+          category: button.dataset.category,
+          sellingPrice: Number(button.dataset.sellingPrice || 0),
+          costPrice: Number(button.dataset.costPrice || 0),
+          quantity: 1
+        });
+      }
+      renderCart();
+    });
+  });
+
+  document.getElementById('productSearch').addEventListener('input', (event) => {
+    const query = event.target.value.toLowerCase();
+    document.querySelectorAll('.product-row').forEach((row) => {
+      const name = row.dataset.name || '';
+      const category = row.dataset.category || '';
+      const visible = !query || name.includes(query) || category.includes(query);
+      row.style.display = visible ? '' : 'none';
+    });
+  });
+
+  document.getElementById('confirmSale').addEventListener('click', async () => {
+    const customerName = document.getElementById('customerName').value.trim();
+    const customerPhone = document.getElementById('customerPhone').value.trim();
+    const customerEmail = document.getElementById('customerEmail').value.trim();
+    const customerAddress = document.getElementById('customerAddress').value.trim();
+    const paymentMethod = document.getElementById('paymentMethod').value;
+
+    if (!customerName || !customerPhone) {
+      alert('Customer name and phone are required.');
+      return;
+    }
+
+    if (!cart.length) {
+      alert('Add at least one product to the cart before confirming the sale.');
+      return;
+    }
+
+    const payload = {
+      customerName,
+      customerPhone,
+      customerEmail,
+      customerAddress,
+      paymentMethod,
+      items: cart.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        sellingPrice: item.sellingPrice,
+        costPrice: item.costPrice
+      }))
+    };
+
+    const response = await fetch('/api/owner/offline-sales', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json().catch(() => ({ error: 'Unable to create the sale.' }));
+    if (!response.ok) {
+      alert(data.error || 'Unable to create the sale.');
+      return;
+    }
+
+    cart.length = 0;
+    renderCart();
+    document.getElementById('customerName').value = '';
+    document.getElementById('customerPhone').value = '';
+    document.getElementById('customerEmail').value = '';
+    document.getElementById('customerAddress').value = '';
+    alert('Offline sale recorded successfully.');
+    window.location.href = '/apb/owner/sales-history';
+  });
+
+  renderCart();
+</script>

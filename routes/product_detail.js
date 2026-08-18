@@ -59,9 +59,14 @@ router.post("/edit", isLoggedIn, isOwner, async (req, res, next) => {
         prod.Selling_price = req.body.Selling_price;
         prod.orginal_price = req.body.orginal_price;
 
+        const stockValue = Number(req.body.stock || 0);
+        prod.stock = stockValue;
+
         // Availability
         if (req.body.status) {
-            prod.Availability = req.body.status === "instock";
+            prod.Availability = req.body.status === "instock" && stockValue > 0;
+        } else {
+            prod.Availability = stockValue > 0;
         }
 
         // Image abhi same rahegi

@@ -1,0 +1,593 @@
+I want to make my existing APB project fully responsive for BOTH desktop/laptop and mobile phones.
+
+IMPORTANT:
+- The application must work properly on laptops/desktops AND smartphones.
+- Do NOT make it mobile-only.
+- Do NOT damage or remove the existing desktop layout.
+- Do NOT simply shrink the desktop UI on mobile.
+- Create a proper responsive design where the layout adapts intelligently according to screen size.
+- Preserve all existing functionality, backend logic, APIs, database logic, authentication, and business logic.
+- First inspect the existing project before making changes.
+- Reuse the existing UI components, CSS, design system, and frontend architecture wherever possible.
+- Do not rewrite the entire application.
+
+==================================================
+MAIN REQUIREMENT
+==================================================
+
+APB must provide a good user experience on:
+
+- Mobile phones
+- Tablets
+- Laptops
+- Desktop monitors
+
+The same application should automatically adapt to the available screen width.
+
+Example:
+
+Mobile:
+320px - 480px
+
+Tablet:
+481px - 1024px
+
+Laptop/Desktop:
+1025px+
+
+Do not hard-code these exact breakpoints if the existing project already has a responsive system. Use the project's existing conventions when appropriate.
+
+==================================================
+DESKTOP/LAPTOP
+==================================================
+
+The existing desktop experience should remain fully usable.
+
+On laptop/desktop:
+
+- use the available horizontal space
+- show appropriate multi-column layouts
+- use sidebar navigation where appropriate
+- display tables normally where useful
+- show multiple dashboard cards in a row
+- display analytics charts at useful sizes
+- keep forms appropriately sized
+- avoid excessive empty space
+- maintain the existing desktop design
+
+Do NOT unnecessarily convert desktop layouts into mobile-style cards.
+
+==================================================
+MOBILE
+==================================================
+
+On smaller screens:
+
+- stack columns vertically where necessary
+- make navigation mobile-friendly
+- use hamburger/collapsible navigation if appropriate
+- resize dashboard cards
+- make buttons touch-friendly
+- make forms single-column
+- convert wide tables into cards or responsive layouts when necessary
+- resize charts
+- make product cards fit the screen
+- make cart usable with touch
+- prevent horizontal page scrolling
+
+The mobile layout should be a proper adaptation of the desktop design, not a completely different application.
+
+==================================================
+RESPONSIVE NAVIGATION
+==================================================
+
+Desktop:
+
+Use the existing desktop navigation/sidebar if present.
+
+Mobile:
+
+Adapt the navigation to something suitable for a small screen, such as:
+
+- hamburger menu
+- collapsible sidebar
+- bottom navigation
+
+Do not show a large desktop sidebar that consumes most of the phone screen.
+
+The navigation should automatically adapt based on screen size.
+
+Preserve role-based navigation.
+
+Customer navigation and Owner navigation must remain separate according to the existing authentication/role system.
+
+==================================================
+RESPONSIVE DASHBOARD
+==================================================
+
+Desktop example:
+
++----------------+----------------+----------------+----------------+
+| Revenue        | Profit         | Orders         | Products Sold  |
++----------------+----------------+----------------+----------------+
+
+Mobile:
+
++----------------+
+| Revenue        |
++----------------+
+| Profit         |
++----------------+
+| Orders         |
++----------------+
+| Products Sold  |
++----------------+
+
+Tablet can use 2 columns.
+
+The exact layout should be determined responsively using CSS Grid/Flexbox.
+
+Do not hard-code separate pages for each device.
+
+==================================================
+RESPONSIVE PRODUCT GRID
+==================================================
+
+Desktop:
+
+Multiple product cards per row.
+
+Tablet:
+
+Fewer cards per row.
+
+Mobile:
+
+1 or 2 cards per row depending on available width.
+
+Use responsive CSS Grid/Flexbox.
+
+Example:
+
+Desktop:
+4 cards
+
+Tablet:
+2-3 cards
+
+Mobile:
+1-2 cards
+
+Product cards must maintain:
+
+- image
+- product name
+- company/brand
+- price
+- availability
+- Add to Cart button
+
+without text or buttons overflowing.
+
+==================================================
+RESPONSIVE CART
+==================================================
+
+Desktop can use a table or wide cart layout.
+
+Mobile should use a compact card/list layout.
+
+Desktop:
+
+Product | Price | Quantity | Subtotal | Remove
+
+Mobile:
+
+Product
+Price
+Quantity controls
+Subtotal
+Remove
+
+The cart total and checkout button should remain easy to access.
+
+==================================================
+RESPONSIVE FORMS
+==================================================
+
+Desktop forms may use multiple columns where appropriate.
+
+Mobile forms should become single-column.
+
+Example desktop:
+
+Name        Phone
+Email       Address
+
+Mobile:
+
+Name
+Phone
+Email
+Address
+
+Use proper input types:
+
+- tel
+- email
+- number
+- date
+
+Inputs must be easy to use on touch screens.
+
+Do not make desktop forms unnecessarily narrow.
+
+==================================================
+RESPONSIVE OWNER OFFLINE SALES
+==================================================
+
+The Owner Offline Sale feature must work well on both laptop and phone.
+
+Desktop:
+
+Product search
+        ↓
+Product grid/search results
+        ↓
+Cart panel
+        ↓
+Customer details
+        ↓
+Sale summary
+
+Mobile:
+
+Product search
+        ↓
+Product list
+        ↓
+Cart
+        ↓
+Customer details
+        ↓
+Sale summary
+        ↓
+Confirm Sale
+
+Do not remove any functionality from the mobile version.
+
+The owner must be able to complete an entire offline sale using a phone.
+
+==================================================
+RESPONSIVE ANALYTICS
+==================================================
+
+Analytics must work on both desktop and mobile.
+
+Desktop:
+
+Display multiple analytics cards/charts side-by-side when there is enough space.
+
+Mobile:
+
+Stack cards and charts vertically.
+
+Charts must automatically resize according to container width.
+
+Do NOT simply give charts a fixed width such as:
+
+width: 800px;
+
+because that can cause horizontal scrolling on mobile.
+
+Use responsive chart configuration.
+
+==================================================
+RESPONSIVE TABLES
+==================================================
+
+For desktop, keep useful tables as tables.
+
+For mobile, if a table becomes too wide:
+
+Option 1:
+Convert rows into cards.
+
+Option 2:
+Use a carefully designed responsive table.
+
+Option 3:
+Allow horizontal scrolling ONLY for genuinely tabular data where conversion would hurt usability.
+
+Do not allow the entire webpage to horizontally scroll.
+
+==================================================
+IMAGES
+==================================================
+
+Images must be responsive.
+
+Use:
+
+max-width: 100%;
+
+where appropriate.
+
+Do not distort aspect ratios.
+
+Product images should adapt to:
+
+- phone
+- tablet
+- laptop
+- desktop
+
+Use lazy loading where appropriate.
+
+==================================================
+PERFORMANCE
+==================================================
+
+The application should remain reasonably fast on:
+
+- low-end Android phones
+- normal smartphones
+- laptops
+- desktop computers
+- slower mobile networks
+
+Avoid unnecessary:
+
+- animations
+- huge images
+- duplicate API requests
+- heavy dependencies
+- unnecessary JavaScript
+
+Do not sacrifice desktop performance while optimizing mobile.
+
+==================================================
+NO HORIZONTAL OVERFLOW
+==================================================
+
+This is mandatory.
+
+At every screen size:
+
+- no accidental horizontal page scrolling
+- no overflowing buttons
+- no overflowing images
+- no overflowing cards
+- no text going outside containers
+- no charts extending beyond viewport
+- no navigation overflow
+
+Use responsive CSS instead of fixed widths wherever appropriate.
+
+Avoid unnecessary fixed widths such as:
+
+width: 1200px;
+
+Prefer:
+
+width: 100%;
+max-width: ...;
+
+when appropriate.
+
+==================================================
+RESPONSIVE BREAKPOINT STRATEGY
+==================================================
+
+Use a consistent responsive strategy.
+
+Do not scatter dozens of random media queries throughout the project.
+
+Prefer:
+
+- flexible widths
+- CSS Grid
+- Flexbox
+- max-width
+- minmax()
+- clamp()
+- responsive typography
+- existing project breakpoints
+
+Use media queries only when layout behavior actually needs to change.
+
+==================================================
+TYPOGRAPHY
+==================================================
+
+Text should remain readable on all devices.
+
+Desktop:
+Comfortable larger layout.
+
+Mobile:
+Readable without zooming.
+
+Avoid:
+
+- extremely small text
+- excessive text
+- fixed font sizes that break layouts
+
+Use responsive typography where appropriate.
+
+==================================================
+BUTTONS
+==================================================
+
+Desktop buttons should remain compact and professional.
+
+Mobile buttons should have enough touch area.
+
+Do not make all desktop buttons huge.
+
+Adapt button sizing based on screen size and context.
+
+Primary actions should remain visually clear.
+
+==================================================
+TESTING
+==================================================
+
+After implementation, test the application at:
+
+320px
+360px
+375px
+390px
+414px
+768px
+1024px
+1280px
+1366px
+1440px
+1920px
+
+Test:
+
+- Login
+- Signup
+- Home
+- Product listing
+- Product details
+- Search
+- Cart
+- Checkout
+- Orders
+- Customer profile
+- Owner dashboard
+- Owner offline sale
+- Sales history
+- Customers
+- Analytics
+- All charts
+- Forms
+- Navigation
+
+For each screen size check:
+
+- layout
+- text
+- buttons
+- images
+- navigation
+- forms
+- charts
+- tables
+- horizontal overflow
+- loading states
+- error states
+
+==================================================
+IMPORTANT IMPLEMENTATION RULES
+==================================================
+
+1. Inspect the existing project first.
+2. Do not rewrite the entire application.
+3. Do not break existing desktop functionality.
+4. Do not create a separate mobile application.
+5. Do not create a separate desktop application.
+6. Build ONE responsive web application.
+7. Preserve existing backend APIs.
+8. Preserve database logic.
+9. Preserve authentication.
+10. Preserve Owner/Customer role separation.
+11. Reuse existing components.
+12. Reuse existing styles/design system.
+13. Do not add unnecessary dependencies.
+14. Do not introduce multiple CSS frameworks.
+15. Do not introduce multiple chart libraries.
+16. Keep the code maintainable.
+17. Test both mobile and desktop layouts.
+
+==================================================
+FINAL USER EXPERIENCE
+==================================================
+
+The final application should behave like this:
+
+PHONE:
+
+User opens APB on Android phone
+        ↓
+UI automatically adapts
+        ↓
+Navigation fits phone
+        ↓
+Products fit screen
+        ↓
+Cart is easy to use
+        ↓
+Checkout works
+        ↓
+Owner can create offline sale
+        ↓
+Owner can view analytics
+
+LAPTOP:
+
+User opens the SAME APB application
+        ↓
+UI automatically expands
+        ↓
+Desktop navigation/sidebar appears appropriately
+        ↓
+Product grid uses available width
+        ↓
+Cart uses desktop layout
+        ↓
+Owner dashboard uses multiple columns
+        ↓
+Analytics charts use available screen space
+
+There must be ONE codebase and ONE application.
+
+The application should automatically adapt to the device/screen width.
+
+IMPORTANT:
+Do not detect device using user-agent unless absolutely necessary.
+Prefer responsive CSS and responsive component layouts.
+
+==================================================
+IMPLEMENTATION PROCESS
+==================================================
+
+FIRST:
+
+Inspect the existing project.
+
+Then report:
+
+1. Frontend technology
+2. Existing responsive implementation
+3. Current desktop layout
+4. Current mobile problems
+5. Components/pages that need modification
+6. CSS files that need modification
+7. Any existing responsive/chart libraries
+
+Then create a file-by-file implementation plan.
+
+After that implement the responsive changes incrementally.
+
+After implementation:
+
+- run the existing tests
+- run lint
+- run build
+- fix responsive-related errors
+- verify that existing functionality still works
+
+Finally provide:
+
+1. Files changed
+2. Responsive improvements made
+3. Desktop behavior preserved
+4. Mobile behavior added/improved
+5. Tests performed
+6. Any remaining issues

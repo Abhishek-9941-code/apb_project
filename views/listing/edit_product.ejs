@@ -74,6 +74,12 @@
                      value="<%= prod.orginal_price || '' %>" min="0">
             </div>
           </div>
+
+          <div class="col-sm-4">
+            <label class="form-label">Stock <span class="text-danger">*</span></label>
+            <input type="number" name="stock" class="form-control"
+                   value="<%= prod.stock || 0 %>" min="0" required>
+          </div>
         </div>
 
         <p class="section-label"><i class="fa fa-fire"></i> Product Status</p>

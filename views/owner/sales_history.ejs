@@ -1,0 +1,45 @@
+<% layout('/layout/boilerplat.ejs') %>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Sales History</h2>
+      <p class="text-muted mb-0">Track all offline sales and customer activity</p>
+    </div>
+    <a href="/apb/owner/dashboard" class="btn btn-outline-secondary">Dashboard</a>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Sale ID</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Products</th>
+              <th>Total</th>
+              <th>Profit</th>
+              <th>Payment</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% sales.forEach(sale => { %>
+              <tr>
+                <td>#<%= sale._id.toString().slice(-6) %></td>
+                <td><%= sale.customerName || sale.customerId?.name || 'Walk-in' %></td>
+                <td><%= new Date(sale.createdAt).toLocaleString() %></td>
+                <td><%= sale.totalItems || 0 %></td>
+                <td>₹<%= sale.totalAmount %></td>
+                <td>₹<%= sale.totalProfit %></td>
+                <td><%= sale.paymentMethod %></td>
+                <td><a href="/apb/owner/sales/<%= sale._id %>" class="btn btn-sm btn-outline-primary">View</a></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
